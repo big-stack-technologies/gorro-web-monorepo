@@ -32,6 +32,7 @@ import {
   CircleDollarSignIcon,
   BellRingIcon,
   IdCardIcon,
+  HouseIcon,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -73,6 +74,11 @@ const data = {
           title: "NIN reviews",
           url: routes.protected.kycNinReviews.base,
           icon: <IdCardIcon />,
+        },
+        {
+          title: "Address reviews",
+          url: routes.protected.kycAddressReviews.base,
+          icon: <HouseIcon />,
         },
         {
           title: "Cluster withdrawals",
