@@ -57,6 +57,11 @@ export const routes = {
       detail: (id: string) =>
         `/admin/kyc/nin-reviews/${encodeURIComponent(id)}`,
     },
+    kycAddressReviews: {
+      base: "/admin/kyc/address-reviews",
+      detail: (id: string) =>
+        `/admin/kyc/address-reviews/${encodeURIComponent(id)}`,
+    },
   },
 } as const
 

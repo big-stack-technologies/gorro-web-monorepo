@@ -45,6 +45,11 @@ export function canDecideNinReview(roles?: string[]): boolean {
   )
 }
 
+/** Decide address reviews: same roles as NIN reviews. */
+export function canDecideAddressReview(roles?: string[]): boolean {
+  return canDecideNinReview(roles)
+}
+
 function isClusterAdminPath(pathname: string): boolean {
   const base = routes.protected.clusters.base
   return pathname === base || pathname.startsWith(`${base}/`)

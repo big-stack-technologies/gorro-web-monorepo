@@ -6,9 +6,15 @@ type NinReviewPhotoProps = {
   src: string | null | undefined
   alt: string
   className?: string
+  onError?: () => void
 }
 
-export function NinReviewPhoto({ src, alt, className }: NinReviewPhotoProps) {
+export function NinReviewPhoto({
+  src,
+  alt,
+  className,
+  onError,
+}: NinReviewPhotoProps) {
   if (!src) {
     return (
       <div
@@ -32,6 +38,7 @@ export function NinReviewPhoto({ src, alt, className }: NinReviewPhotoProps) {
         "aspect-3/4 w-full max-w-40 rounded-lg border object-cover",
         className
       )}
+      onError={onError}
     />
   )
 }

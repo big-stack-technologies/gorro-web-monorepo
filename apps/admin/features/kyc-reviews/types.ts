@@ -131,3 +131,82 @@ export type NinReviewDecisionResponse = {
 export type RejectNinReviewPayload = {
   reason: string
 }
+
+export type AddressReviewStatus =
+  | "PENDING_REVIEW"
+  | "APPROVED_MANUAL"
+  | "REJECTED_MANUAL"
+
+export type AddressReviewUser = {
+  id: string
+  name: string | null
+  email: string | null
+  phone: string | null
+  kycTier: number
+}
+
+/** `lga` is often null — render blank, not the string "null". */
+export type AddressReviewAddress = {
+  addressLine: string | null
+  city: string | null
+  state: string | null
+  lga: string | null
+}
+
+/** Row from GET /admin/kyc/address-reviews. Oldest first. */
+export type AddressReview = {
+  id: string
+  user: AddressReviewUser | null
+  address: AddressReviewAddress | null
+  /** Presigned S3 URL, valid for 12 hours. Do not cache past the session. */
+  documentUrl: string | null
+  submittedAt: string
+  waitingHours: number
+}
+
+export type AddressReviewListApiResponse = {
+  page: number
+  limit: number
+  total: number
+  data: AddressReview[]
+}
+
+export type AddressReviewProfile = {
+  userId: string
+  firstName: string | null
+  middleName: string | null
+  lastName: string | null
+  phone: string | null
+  email: string | null
+  kycTier: number
+  /** Presigned S3 URL for name cross-check, not face matching. */
+  passportPhotoUrl: string | null
+}
+
+export type AddressReviewDecision = {
+  reviewedBy: string | null
+  reviewedAt: string | null
+  reviewNote: string | null
+}
+
+/** GET /admin/kyc/address-reviews/:id */
+export type AddressReviewDetail = {
+  id: string
+  status: AddressReviewStatus
+  submittedAt: string
+  /** 1 is the first submission; higher means a resubmission after rejection. */
+  attemptNumber: number
+  profile: AddressReviewProfile
+  claimedAddress: AddressReviewAddress | null
+  documentUrl: string | null
+  review: AddressReviewDecision
+}
+
+export type AddressReviewDecisionResponse = {
+  message: string
+  status: string
+}
+
+export type RejectAddressReviewPayload = {
+  reason: string
+}

@@ -1,3 +1,6 @@
+export { useApproveAddressReview } from "./use-approve-address-review"
 export { useApproveNinReview } from "./use-approve-nin-review"
+export { useGetAddressReview } from "./use-get-address-review"
 export { useGetNinReview } from "./use-get-nin-review"
+export { useRejectAddressReview } from "./use-reject-address-review"
 export { useRejectNinReview } from "./use-reject-nin-review"

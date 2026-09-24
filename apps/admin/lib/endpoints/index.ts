@@ -98,6 +98,13 @@ export const endpoints = {
       `/admin/kyc/nin-reviews/${encodeURIComponent(id)}/approve`,
     kycNinReviewRejectById: (id: string) =>
       `/admin/kyc/nin-reviews/${encodeURIComponent(id)}/reject`,
+    kycAddressReviews: "/admin/kyc/address-reviews",
+    kycAddressReviewById: (id: string) =>
+      `/admin/kyc/address-reviews/${encodeURIComponent(id)}`,
+    kycAddressReviewApproveById: (id: string) =>
+      `/admin/kyc/address-reviews/${encodeURIComponent(id)}/approve`,
+    kycAddressReviewRejectById: (id: string) =>
+      `/admin/kyc/address-reviews/${encodeURIComponent(id)}/reject`,
   },
   uploads: {
     file: "/uploads/file",
