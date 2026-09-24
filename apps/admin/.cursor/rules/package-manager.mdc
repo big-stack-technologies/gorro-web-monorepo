@@ -1,0 +1,34 @@
+---
+description: Use pnpm for all package installs and script invocations
+alwaysApply: true
+---
+
+# Package manager: pnpm
+
+This project uses **pnpm**. Use it for dependency changes and for running package binaries.
+
+## Do
+
+- Install / add / remove: `pnpm add <pkg>`, `pnpm add -D <pkg>`, `pnpm remove <pkg>`
+- Fresh install: `pnpm install`
+- Run binaries: `pnpm exec <cmd>`, `pnpm dlx <pkg>` (not `npx` unless mirroring upstream docs exactly)
+- Scripts from `package.json`: `pnpm run <script>` or `pnpm <script>` when unambiguous
+
+## Don’t
+
+- Do not use `npm install`, `yarn add`, or `bun add` unless the user explicitly asks to use another tool.
+
+## Examples
+
+```bash
+# Add a runtime dependency
+pnpm add zod
+
+# Add a dev dependency
+pnpm add -D @types/node
+
+# One-off CLI
+pnpm dlx shadcn@latest add button
+```
+
+When suggesting commands to the user or running installs in the terminal, **default to pnpm**.

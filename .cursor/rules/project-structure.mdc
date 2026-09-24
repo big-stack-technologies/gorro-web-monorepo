@@ -1,0 +1,51 @@
+---
+description: Project directory layout, important paths, and where to add code
+alwaysApply: true
+---
+
+# Project structure (`gorro-web`)
+
+Turborepo with two Next.js apps and shared source packages. Package manager is pnpm.
+
+## Top-level
+
+| Path | Purpose |
+|------|---------|
+| `apps/admin` | Admin dashboard (`@gorro/admin`), port 3000 |
+| `apps/marketing` | Marketing dashboard skeleton (`@gorro/marketing`), port 3001 |
+| `packages/ui` | `@gorro/ui` — shadcn, data table, shell primitives, `cn` and formatters |
+| `packages/api` | `@gorro/api` — axios client, cookies, env, action results, query client |
+| `packages/auth` | `@gorro/auth` — login, logout, profile, login form |
+| `packages/typescript-config` | Shared `tsconfig` |
+| `turbo.json` | Task pipeline |
+
+**Do not treat as source:** `node_modules/`, `.next/`, `.turbo/`, `.pnpm-store/`.
+
+## `apps/admin`
+
+Domain features stay here: `features/*` except shared auth, `lib/routes.ts`, `lib/endpoints`, `lib/query-keys`, `lib/breadcrumbs`, `features/auth/access.ts`, partner route guard.
+
+- `app/(auth)/login/` — Login page
+- `app/(protected)/admin/` — Admin pages
+- `app/api/auth/logout/` — Clears session cookies
+- `components/partials/app-sidebar.tsx` — Admin navigation
+- `components/layouts/AdminShell.layout.tsx` — AppShell plus partner RBAC
+
+## `apps/marketing`
+
+Authenticated shell only. Do not copy admin domain features.
+
+- `app/(auth)/login/` — Shared `LoginForm`, redirect to `/`
+- `app/(protected)/` — AppShell and placeholder dashboard
+- `app/api/auth/logout/` — Clears session cookies
+- `lib/routes.ts` — `home: "/"`, `login: "/login"`
+
+## Shared packages
+
+Import from package exports (`@gorro/ui/components/ui/button`, `@gorro/api/client`, `@gorro/auth/login-form`). Apps set `transpilePackages` for these packages. Do not add a compile `dist` step.
+
+- New shared UI: `packages/ui` (`components.json` lives there).
+- New shared HTTP/session code: `packages/api`.
+- New shared auth: `packages/auth`. Redirect and login paths stay in each app's server actions.
+- New admin API route: `apps/admin/lib/endpoints/index.ts`, then a server action.
+- New admin list query: keys in `apps/admin/lib/query-keys.ts`.

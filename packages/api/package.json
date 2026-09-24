@@ -1,0 +1,37 @@
+{
+  "name": "@gorro/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./api-error": "./src/api-error.ts",
+    "./action-result": "./src/action-result.ts",
+    "./axios": "./src/axios.ts",
+    "./client": "./src/client.ts",
+    "./cookies": "./src/cookies.ts",
+    "./cookie-options": "./src/cookie-options.ts",
+    "./env": "./src/env.ts",
+    "./endpoints": "./src/endpoints.ts",
+    "./clear-session": "./src/clear-session.ts",
+    "./build-paginated-query-params": "./src/build-paginated-query-params.ts",
+    "./types/paginated-list": "./src/types/paginated-list.ts",
+    "./types/analytics-api": "./src/types/analytics-api.ts",
+    "./query/query-client": "./src/query/query-client.ts",
+    "./query/providers": "./src/query/providers.tsx"
+  },
+  "peerDependencies": {
+    "next": "16.1.7",
+    "react": "^19.2.4"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.95.2",
+    "@tanstack/react-query-devtools": "^5.95.2",
+    "axios": "^1.14.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}

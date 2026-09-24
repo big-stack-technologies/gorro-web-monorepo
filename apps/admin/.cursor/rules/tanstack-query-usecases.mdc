@@ -1,0 +1,38 @@
+---
+description: TanStack Query — colocate useQuery/useMutation in feature usecase hooks
+globs: features/**/*
+alwaysApply: false
+---
+
+# TanStack Query in features
+
+Do **not** call `useQuery`, `useMutation`, or `useInfiniteQuery` inline inside page or dialog components for feature data.
+
+## Do
+
+- Add a hook under **`features/<feature>/usecases/`** (e.g. `use-get-user.ts`, `use-update-user.ts`).
+- Export the hook from **`features/<feature>/usecases/index.ts`**.
+- Keep **query keys**, **invalidateQueries** targets, and **server action / API calls** inside that hook (or shared helpers the hook uses).
+- UI components import **`useGetUser`**, **`useUpdateUser`**, etc., and only wire **presentation** (forms, open/close, `mutate` callbacks like closing a dialog).
+
+## Don’t
+
+- Embed a full `useMutation({ mutationFn, onSuccess: invalidate... })` in `*.tsx` under `features/**/ui/` when it’s feature-specific server/API behavior.
+
+## Example
+
+```tsx
+// features/acme/usecases/use-update-widget.ts
+export function useUpdateWidget(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (input) => updateWidgetAction(id, input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.widgets.detail(id) })
+      toast.success("Updated")
+    },
+  })
+}
+
+// features/acme/ui/widget-form.tsx — only calls the hook + mutate(values, { onSuccess: () => close() })
+```

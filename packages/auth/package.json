@@ -1,0 +1,33 @@
+{
+  "name": "@gorro/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./types": "./src/types.ts",
+    "./schema": "./src/schema.ts",
+    "./query-keys": "./src/query-keys.ts",
+    "./login": "./src/login.ts",
+    "./logout": "./src/logout.ts",
+    "./get-profile": "./src/get-profile.ts",
+    "./use-get-profile": "./src/use-get-profile.ts",
+    "./login-form": "./src/login-form.tsx",
+    "./auth-nav-user": "./src/auth-nav-user.tsx"
+  },
+  "peerDependencies": {
+    "next": "16.1.7",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "dependencies": {
+    "@gorro/api": "workspace:*",
+    "@gorro/ui": "workspace:*",
+    "@tanstack/react-query": "^5.95.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}

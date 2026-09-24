@@ -1,0 +1,375 @@
+---
+description: Error checking workflow and debugging guidelines
+alwaysApply: true
+---
+
+# Error Checking Workflow
+
+## ⚠️ MANDATORY SELF-CHECK ⚠️
+
+After **EVERY code change** (no matter how small), you MUST ask yourself:
+
+> ## **"What errors are currently in my application?"**
+
+Then **IMMEDIATELY** check using the tools below.
+
+### This is NOT Optional
+
+- ❌ Do NOT skip this check
+- ❌ Do NOT assume the code is correct
+- ❌ Do NOT move to the next task without checking
+- ✅ ALWAYS verify with both tools (Next.js MCP + Linter)
+
+**If you skip this check, you risk introducing runtime errors that break the application.**
+
+## Error Checking Tools
+
+### 1. Next.js MCP Server (Primary)
+
+**When to use**: When Next.js dev server is running
+
+**What it catches**:
+
+- Runtime errors in browser
+- Build/compilation errors
+- Server-side errors
+- Next.js-specific errors
+- Console errors and warnings
+
+**How to use**:
+
+```
+1. Call: mcp_next-devtools_nextjs_runtime
+   - action: "call_tool"
+   - port: 3000 (or discovered port)
+   - toolName: "get_errors"
+
+2. Review output for any errors
+
+3. Fix errors if found
+
+4. Re-check to verify fixes
+```
+
+**Example**:
+
+```typescript
+// After making changes, check:
+mcp_next-devtools_nextjs_runtime -> get_errors
+// Result: "No errors detected" ✅
+```
+
+### 2. TypeScript/ESLint Linter
+
+**When to use**: Always, for static analysis
+
+**What it catches**:
+
+- TypeScript type errors
+- ESLint warnings
+- Unused imports/variables
+- Code style issues
+
+**How to use**:
+
+```
+1. Call: read_lints
+   - paths: Array of files you modified
+
+2. Fix any warnings/errors
+
+3. Re-check modified files
+```
+
+**Example**:
+
+```typescript
+// After editing files:
+read_lints(["components/orders/ui/order-details.page.tsx"]);
+// Fix any errors found
+```
+
+## Recommended Workflow
+
+### After Making Changes
+
+```
+Step 1: Make your code changes
+  ↓
+Step 2: Check runtime errors
+  → mcp_next-devtools_nextjs_runtime (get_errors)
+  ↓
+Step 3: Check linter errors
+  → read_lints on modified files
+  ↓
+Step 4: Fix any errors found
+  ↓
+Step 5: Re-verify both checks
+  ↓
+Step 6: Proceed with next task
+```
+
+## When to Check
+
+### Always Check After:
+
+1. **File edits** - Any file modification
+2. **New files** - Creating new components/pages
+3. **Package installs** - Adding new dependencies
+4. **Refactoring** - Large code changes
+5. **Type changes** - Modifying interfaces/types
+6. **API changes** - Updating endpoints or responses
+7. **Component props changes** - Modifying component APIs
+
+### Check Even If:
+
+- ✅ Change seems "simple" or "small"
+- ✅ Only modified comments
+- ✅ Only changed styling
+- ✅ Confident the change is correct
+
+**Why?** Errors can cascade unexpectedly. Always verify.
+
+## Error Priorities
+
+### Critical (Fix Immediately)
+
+1. **Runtime errors** - Application crashes/broken pages
+2. **TypeScript errors** - Type safety violations
+3. **Build errors** - Prevents deployment
+
+### Important (Fix Soon)
+
+4. **Console warnings** - Potential issues
+5. **ESLint errors** - Code quality issues
+
+### Optional (Fix When Convenient)
+
+6. **ESLint warnings** - Style suggestions
+7. **Performance warnings** - Optimization opportunities
+
+## Common Error Patterns
+
+### React 19 Compiler Warnings
+
+Some warnings are expected and safe:
+
+```typescript
+// ✅ Safe to ignore:
+// "TanStack Table's useReactTable() returns functions..."
+// This is expected behavior, not an actual error
+```
+
+### Next.js Redirect "Errors"
+
+```typescript
+// ✅ Expected behavior:
+// "NEXT_REDIRECT" in console when redirect() is called
+// This is how Next.js handles redirects internally
+```
+
+### Hydration Warnings
+
+```typescript
+// Fix by adding suppressHydrationWarning:
+<html lang="en" suppressHydrationWarning>
+```
+
+## Debugging Steps
+
+### 1. Check Next.js MCP First
+
+```
+mcp_next-devtools_nextjs_runtime -> get_errors
+→ Shows actual runtime/browser errors
+```
+
+### 2. Check Linter
+
+```
+read_lints -> Check modified files
+→ Shows TypeScript/ESLint issues
+```
+
+### 3. Check Browser Console
+
+Open browser DevTools:
+
+- Red errors = Runtime errors
+- Yellow warnings = Potential issues
+
+### 4. Check Terminal Output
+
+Watch terminal where `pnpm dev` is running:
+
+- Compilation errors
+- Server errors
+- Hot reload status
+
+## Prevention
+
+### Before Making Changes
+
+1. **Understand impact** - What files will be affected?
+2. **Check types** - Will type changes break consumers?
+3. **Review dependencies** - Are all imports correct?
+
+### While Making Changes
+
+1. **Small increments** - Make small, testable changes
+2. **Check frequently** - Verify after each logical step
+3. **Test edge cases** - Consider null/undefined cases
+
+### After Making Changes
+
+1. **Run error checks** - Use both MCP and linter
+2. **Test the feature** - Actually use it in browser
+3. **Check related code** - Did you break consumers?
+
+## Best Practices
+
+### ✅ DO
+
+- Check for errors after every code change
+- Use Next.js MCP when dev server is running
+- Check linter on modified files
+- Fix errors before moving to next task
+- Test in browser to verify fixes
+- Re-check after fixing errors
+- **Always log errors in catch blocks with `console.error`**
+
+### ❌ DON'T
+
+- Skip error checking "because the change is small"
+- Only check linter (miss runtime errors)
+- Assume no errors without checking
+- Move to next task with unresolved errors
+- Ignore "minor" warnings (they can cascade)
+- **Leave catch blocks empty or comment-only**
+
+## Catch Block Guidelines
+
+**CRITICAL**: Never leave catch blocks empty. Always use `console.error` at minimum.
+
+```tsx
+// ✅ Good - Logs error for debugging
+try {
+  await mutation.mutateAsync(data);
+  onClose();
+} catch (error) {
+  console.error("Failed to save:", error);
+}
+
+// ✅ Good - Handles and logs
+try {
+  await saveData();
+} catch (error) {
+  toast.error(handleError(error, "Failed to save"));
+  console.error("Save error:", error);
+}
+
+// ✅ Good - Re-throw with logging
+try {
+  await processData();
+} catch (error) {
+  console.error("Processing failed:", error);
+  throw error;
+}
+
+// ❌ Bad - Silent failures
+try {
+  await saveData();
+} catch {
+  // Empty catch block - debugging nightmare
+}
+
+// ❌ Bad - No logging
+try {
+  await saveData();
+} catch (error) {
+  // Comment only, no actual error handling
+}
+```
+
+### Why This Matters
+
+- **Debugging**: Console logs help identify issues in production
+- **Context**: Error messages provide actionable information
+- **Stack traces**: Full error object includes valuable debugging data
+- **Silent failures**: Empty catches hide bugs and make debugging impossible
+
+## Integration with Development
+
+### Code Change Workflow (MANDATORY)
+
+```
+User requests change
+  ↓
+Make code changes
+  ↓
+⚠️ STOP AND ASK: "What errors are currently in my application?"
+  ↓
+Check runtime errors (Next.js MCP) - REQUIRED
+  ↓
+Check linter errors (read_lints) - REQUIRED
+  ↓
+Fix any errors found - REQUIRED
+  ↓
+Re-verify both checks - REQUIRED
+  ↓
+Report to user (changes + error status)
+```
+
+### BEFORE Completing Any Task
+
+**Checklist** (ALL must be ✅):
+
+- [ ] Asked: "What errors are currently in my application?"
+- [ ] Checked runtime errors with Next.js MCP
+- [ ] Checked linter errors with read_lints
+- [ ] Fixed all errors found
+- [ ] Re-verified fixes
+- [ ] Reported error status to user
+
+### Example Response Format
+
+After making changes, report:
+
+```markdown
+✅ Changes Applied:
+
+- Updated component X
+- Added feature Y
+
+🔍 Error Check:
+
+- Runtime errors: None (Next.js MCP)
+- Linter errors: None
+- Status: ✅ All clear
+```
+
+## Error Reporting
+
+When errors are found, report clearly:
+
+```markdown
+⚠️ Errors Found:
+
+**Runtime Errors** (Next.js MCP):
+
+- Component crashed on /orders page
+- Fix: Add null check for order.data
+
+**Linter Errors**:
+
+- Unused import in order-details.page.tsx
+- Fix: Remove unused import
+
+Fixing now...
+```
+
+## References
+
+- [Next.js MCP Documentation](mdc:.cursor/rules/nextjs-patterns.mdc)
+- [Error Handling Patterns](mdc:.cursor/rules/component-architecture.mdc)
+- [Debugging Guide](mdc:.cursor/rules/quick-reference.mdc)

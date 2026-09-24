@@ -1,0 +1,64 @@
+---
+description: Project directory layout, important paths, and where to add code
+alwaysApply: true
+---
+
+# Project structure (`gorro-admin-next`)
+
+## Top-level
+
+| Path | Purpose |
+|------|---------|
+| `app/` | Next.js App Router — routes, layouts, Route Handlers |
+| `components/` | Shared UI: shadcn (`components/ui`), data table, layouts, partials |
+| `features/` | Domain features (`auth`, `users`, …) — colocate actions, UI, hooks |
+| `lib/` | API client, env, query keys, routes, cookies, shared utils |
+| `hooks/` | Shared React hooks (e.g. `use-mobile`) |
+| `public/` | Static assets |
+| `components.json` | shadcn/ui registry / config |
+
+**Do not treat as source:** `node_modules/`, `.next/`, `.pnpm-store/` (deps & build output).
+
+## `app/`
+
+- Root: `layout.tsx`, `globals.css`, `page.tsx`, `favicon.ico`
+- `(auth)/login/` — Login page
+- `(protected)/admin/` — Admin layout (`layout.tsx`), dashboard `page.tsx`, `error.tsx`, `users/page.tsx`
+- `api/auth/logout/` — Logout Route Handler (`route.ts`)
+
+## `components/`
+
+- `ui/` — shadcn components (button, dialog, field, table, …)
+- `data-table/` — Reusable table, filters, row actions (`data-table.tsx`, `data-table-filters.tsx`, `data-table-row-actions.tsx`)
+- `layouts/` — Shell layouts (e.g. `AdminShell.layout.tsx`)
+- `partials/` — Sidebar, nav, header pieces
+- Other shared widgets: `theme-provider.tsx`, `site-header.tsx`, etc.
+
+## `features/<feature>/` (e.g. `auth`, `users`)
+
+- `actions/` — **Server Actions** (`"use server"`) calling `lib/api` — list in `actions/index.ts`
+- `columns/` — TanStack `ColumnDef` for data tables
+- `ui/` — Pages, dialogs, feature-specific components — export from `ui/index.ts`
+- `usecases/` — TanStack **`useQuery` / `useMutation`** hooks — export from `usecases/index.ts`
+- `schema.ts` — Zod schemas where used
+- `types.ts`, `constants.ts`, `table-filters.ts` — as needed
+- `index.ts` — Barrel exports for the feature
+
+## `lib/`
+
+- `api/axios.ts` — Axios instance + `get`/`post`/`patch`/… (uses cookies / server context; avoid importing from client UI except via server actions)
+- `api/api-error.ts` — **`ApiError` + `isApiError`** — safe on the client
+- `api/build-paginated-query-params.ts` — Shared list query builder
+- `endpoints/index.ts` — **REST path constants** (`auth.*`, `admin.*`)
+- `query-keys.ts` — **TanStack Query keys** (single source of truth)
+- `query/` — `QueryClient` defaults + `QueryProvider`
+- `auth/clear-session.ts` — Server-only session clearing (uses `next/headers`)
+- `routes.ts`, `env.ts`, `cookies.ts`, `cookie-options.ts`, `breadcrumbs.ts`
+- `utils.ts` — `cn()`, date/currency helpers, `emptyAsNa`, etc.
+- `types/` — Shared TS types (e.g. paginated list)
+
+## Conventions
+
+- **New API route:** add to `lib/endpoints/index.ts`, then a server action or Route Handler.
+- **New list/detail query:** add keys to `lib/query-keys.ts`; mutations should `invalidateQueries` appropriately.
+- **New admin CRUD UI:** prefer `features/<domain>/` with `actions` + `usecases` + `ui` per existing `users` / `auth` patterns.
