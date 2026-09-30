@@ -33,7 +33,10 @@ import { Skeleton } from "@gorro/ui/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@gorro/ui/components/ui/tabs"
 import { listClusterWithdrawalsAction } from "@/features/clusters/actions"
 import { clusterDetailWithdrawalsColumns } from "@/features/clusters/columns"
-import { CLUSTER_CURRENCY } from "@/features/clusters/constants"
+import {
+  CLUSTER_CURRENCY,
+  formatInviteRole,
+} from "@/features/clusters/constants"
 import { clusterWithdrawalsTableFilters } from "@/features/clusters/table-filters"
 import { ClusterMembersTable } from "@/features/clusters/ui/cluster-members-table"
 import { ClusterStatusBadge } from "@/features/clusters/ui/cluster-status-badge"
@@ -121,6 +124,8 @@ export function ClusterDetailPage({ clusterId }: { clusterId: string }) {
   }
 
   const cluster = clusterQuery.data
+  const governance = cluster.governance
+  const pushEnabled = cluster.settings?.withdrawalPushNotificationsEnabled
   const initials = cluster.name
     .split(/\s+/)
     .slice(0, 2)
@@ -165,6 +170,16 @@ export function ClusterDetailPage({ clusterId }: { clusterId: string }) {
           Edit cluster
         </Button>
       </div>
+
+      {governance && governance.canReachApprovalThreshold === false ? (
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+          This cluster has {governance.activeAdminCount.toLocaleString()} active{" "}
+          {governance.activeAdminCount === 1 ? "admin" : "admins"} and needs{" "}
+          {governance.requiredApprovals.toLocaleString()} approvals. Deposits
+          still work. Withdrawals and closures stay pending until enough admins
+          are active.
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
@@ -225,6 +240,37 @@ export function ClusterDetailPage({ clusterId }: { clusterId: string }) {
                   label="Withdrawals"
                   value={cluster.withdrawalCount.toLocaleString()}
                 />
+                {governance ? (
+                  <DetailField
+                    label="Active admins"
+                    value={`${governance.activeAdminCount.toLocaleString()} of ${governance.requiredApprovals.toLocaleString()} required`}
+                  />
+                ) : null}
+                {pushEnabled != null ? (
+                  <DetailField
+                    label="Withdrawal pushes"
+                    value={
+                      pushEnabled
+                        ? "On"
+                        : "Off — in-app notices still record, device pushes do not"
+                    }
+                  />
+                ) : null}
+                {governance?.pendingAdminInvites?.length ? (
+                  <DetailField
+                    label="Pending admin invites"
+                    value={
+                      <ul className="space-y-1">
+                        {governance.pendingAdminInvites.map((invite) => (
+                          <li key={invite.inviteId}>
+                            {invite.name || "Unnamed"} · {invite.phoneNumber} ·{" "}
+                            {formatInviteRole(invite.pendingRole)}
+                          </li>
+                        ))}
+                      </ul>
+                    }
+                  />
+                ) : null}
                 <DetailField
                   label="Interest forfeited"
                   value={cluster.interestForfeited ? "Yes" : "No"}

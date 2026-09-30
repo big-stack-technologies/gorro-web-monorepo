@@ -114,7 +114,7 @@ export function EditClusterDialog({
                 <Input
                   id="cluster-required-approvals"
                   type="number"
-                  min={1}
+                  min={2}
                   max={10}
                   inputMode="numeric"
                   aria-invalid={!!form.formState.errors.requiredApprovals}
@@ -123,7 +123,7 @@ export function EditClusterDialog({
                   })}
                 />
                 <FieldDescription>
-                  Number of cluster admin approvals needed before payout.
+                  At least two cluster admin approvals are required before payout.
                 </FieldDescription>
                 <FieldError
                   errors={[form.formState.errors.requiredApprovals]}

@@ -10,6 +10,7 @@ import { listClustersAction } from "@/features/clusters/actions"
 import { clustersColumns } from "@/features/clusters/columns"
 import { clustersTableFilters } from "@/features/clusters/table-filters"
 import { ClustersAnalyticsSection } from "@/features/clusters/ui/clusters-analytics-section"
+import { ContributorBackfillCard } from "@/features/clusters/ui/contributor-backfill-card"
 import { QUERY_KEYS } from "@/lib/query-keys"
 import { routes } from "@/lib/routes"
 
@@ -28,6 +29,7 @@ export function ClustersPage() {
           </Link>
         </Button>
       </div>
+      <ContributorBackfillCard />
       <ClustersAnalyticsSection />
       <section
         className="flex flex-col gap-4"

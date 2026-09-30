@@ -40,6 +40,48 @@ export type ClusterMember = {
   joinedAt: string
 }
 
+export type ClusterContributorStatus = "PENDING" | "LINKED" | "REVOKED"
+
+export type ClusterInviteRole = "CONTRIBUTOR" | "MEMBER" | "ADMIN"
+
+export type ClusterContributor = {
+  contributorId: string
+  phoneNumber: string
+  name: string | null
+  status: ClusterContributorStatus | string
+  totalContributed: number
+  userId: string | null
+}
+
+export type ClusterPendingInvite = {
+  inviteId: string
+  phoneNumber: string
+  name: string | null
+  pendingRole: ClusterInviteRole | string
+  status: string
+  totalContributed: number
+}
+
+export type ClusterMembersList = {
+  totalMembers: number
+  totalContributors: number
+  totalPendingInvites: number
+  items: ClusterMember[]
+  contributors: ClusterContributor[]
+  pendingInvites: ClusterPendingInvite[]
+}
+
+export type ClusterGovernance = {
+  requiredApprovals: number
+  activeAdminCount: number
+  canReachApprovalThreshold: boolean
+  pendingAdminInvites?: ClusterPendingInvite[]
+}
+
+export type ClusterSettings = {
+  withdrawalPushNotificationsEnabled: boolean
+}
+
 export type ClusterDetail = ClusterListItem & {
   description: string | null
   imageUrl: string | null
@@ -50,6 +92,8 @@ export type ClusterDetail = ClusterListItem & {
   closureRequestedAt: string | null
   closureFinalAt: string | null
   members: ClusterMember[]
+  settings?: ClusterSettings | null
+  governance?: ClusterGovernance | null
 }
 
 export type ClusterWithdrawal = {
@@ -67,6 +111,43 @@ export type ClusterWithdrawal = {
   requiredApprovals: number
   narration: string
   createdAt: string
+  /** Present when the cluster cannot yet approve withdrawals. */
+  warning?: string | null
+}
+
+export type ContributorBackfillPlanItem = {
+  clusterId: string | null
+  clusterName: string | null
+  phoneNumber: string | null
+  name: string | null
+  outcome: string | null
+  virtualAccountCount: number
+}
+
+export type ContributorBackfillUnparseable = {
+  clusterId: string | null
+  clusterName: string | null
+  phoneNumber: string | null
+  name: string | null
+  raw: string | null
+}
+
+export type ContributorBackfillFailure = {
+  clusterId: string | null
+  phoneNumber: string | null
+  message: string | null
+}
+
+export type ContributorBackfillResult = {
+  dryRun: boolean
+  virtualAccountsFound: number
+  distinctContributors: number
+  toCreate: number
+  toReuse: number
+  willLinkToExistingUsers: number
+  plan: ContributorBackfillPlanItem[]
+  unparseable: ContributorBackfillUnparseable[]
+  failures: ContributorBackfillFailure[]
 }
 
 export type ClusterApiPaginatedResponse<T> = {

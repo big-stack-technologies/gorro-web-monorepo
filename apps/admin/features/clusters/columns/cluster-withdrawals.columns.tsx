@@ -57,7 +57,16 @@ export function getClusterWithdrawalsColumns(
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => <ClusterStatusBadge status={row.original.status} />,
+      cell: ({ row }) => (
+        <div className="space-y-1">
+          <ClusterStatusBadge status={row.original.status} />
+          {row.original.warning ? (
+            <p className="max-w-56 text-xs text-amber-700 dark:text-amber-400">
+              {row.original.warning}
+            </p>
+          ) : null}
+        </div>
+      ),
     },
     {
       id: "approvals",

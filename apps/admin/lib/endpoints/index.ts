@@ -82,6 +82,7 @@ export const endpoints = {
     clustersAnalyticsTopByActivity: "/admin/clusters/analytics/top-by-activity",
     clustersAnalyticsWithdrawalVolume:
       "/admin/clusters/analytics/withdrawal-volume",
+    clustersBackfillContributors: "/admin/clusters/jobs/backfill-contributors",
     reengagementConfig: "/admin/reengagement/config",
     reengagementRun: "/admin/reengagement/run",
     reengagementNudges: "/admin/reengagement/nudges",

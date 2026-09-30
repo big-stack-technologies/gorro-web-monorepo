@@ -1,9 +1,12 @@
 import type {
+  ClusterContributorStatus,
+  ClusterInviteRole,
   ClusterMemberRole,
   ClusterMemberStatus,
   ClusterStatus,
   ClusterWithdrawalStatus,
 } from "@/features/clusters/types"
+import { formatSnakeCaseWords } from "@gorro/ui/utils"
 
 export const CLUSTER_CURRENCY = "NGN"
 
@@ -41,3 +44,32 @@ export const CLUSTER_MEMBER_STATUS_LABELS: Record<ClusterMemberStatus, string> =
     PENDING_JOIN: "Pending join",
     REMOVED: "Removed",
   }
+
+export const CLUSTER_CONTRIBUTOR_STATUS_LABELS: Record<
+  ClusterContributorStatus,
+  string
+> = {
+  PENDING: "Pending",
+  LINKED: "Linked",
+  REVOKED: "Removed",
+}
+
+export const CLUSTER_INVITE_ROLE_LABELS: Record<ClusterInviteRole, string> = {
+  CONTRIBUTOR: "Contributor",
+  MEMBER: "Member",
+  ADMIN: "Admin",
+}
+
+export function formatContributorStatus(status: string) {
+  if (status in CLUSTER_CONTRIBUTOR_STATUS_LABELS) {
+    return CLUSTER_CONTRIBUTOR_STATUS_LABELS[status as ClusterContributorStatus]
+  }
+  return formatSnakeCaseWords(status)
+}
+
+export function formatInviteRole(role: string) {
+  if (role in CLUSTER_INVITE_ROLE_LABELS) {
+    return CLUSTER_INVITE_ROLE_LABELS[role as ClusterInviteRole]
+  }
+  return formatSnakeCaseWords(role)
+}
