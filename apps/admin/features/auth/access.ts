@@ -17,6 +17,10 @@ export function isPartnerOnly(roles?: string[]): boolean {
   return roles.includes(USER_ROLE.partner) && !hasAdminAccess(roles)
 }
 
+export function isSuperAdmin(roles?: string[]): boolean {
+  return Boolean(roles?.includes(USER_ROLE.super_admin))
+}
+
 export function canManageClusters(roles?: string[]): boolean {
   if (!roles?.length) return false
   return (

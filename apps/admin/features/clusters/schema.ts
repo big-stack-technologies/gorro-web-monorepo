@@ -6,7 +6,7 @@ export const updateClusterSchema = z.object({
   requiredApprovals: z
     .number()
     .int("Approvals must be a whole number")
-    .min(1, "At least one approval is required")
+    .min(2, "At least two approvals are required")
     .max(10, "No more than 10 approvals are allowed"),
 })
 

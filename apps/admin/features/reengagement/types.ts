@@ -133,6 +133,10 @@ export type SendReengagementEmailPayload = {
   emails?: string[]
   audience?: ReengagementAudience
   balanceBelow?: number
+  /** Inbox display name. Omit to send as Gorro / The Gorro Team. */
+  senderName?: string
+  /** Shown under the name. Ignored by the API when senderName is absent. */
+  senderTitle?: string
 }
 
 export type SendReengagementEmailResponse = {

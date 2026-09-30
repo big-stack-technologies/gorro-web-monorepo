@@ -1,5 +1,10 @@
 import { z } from "zod"
 
+import {
+  EMAIL_SENDER_NAME_MAX_LENGTH,
+  EMAIL_SENDER_TITLE_MAX_LENGTH,
+} from "@/features/reengagement/constants"
+
 export const updateReengagementConfigFormSchema = z.object({
   masterEnabled: z.boolean(),
   kycReminderEnabled: z.boolean(),
@@ -70,8 +75,37 @@ export const sendReengagementEmailFormSchema = z
     emails: z.string().optional(),
     audience: z.string().optional(),
     balanceBelow: z.number().int().positive().optional(),
+    senderMode: z.enum(["team", "person"]),
+    senderName: z.string().optional(),
+    senderTitle: z.string().optional(),
   })
   .superRefine((data, ctx) => {
+    if (data.senderMode === "person") {
+      const name = data.senderName?.trim() ?? ""
+      if (!name) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Name is required",
+          path: ["senderName"],
+        })
+      } else if (name.length > EMAIL_SENDER_NAME_MAX_LENGTH) {
+        ctx.addIssue({
+          code: "custom",
+          message: `Name must be ${EMAIL_SENDER_NAME_MAX_LENGTH} characters or fewer`,
+          path: ["senderName"],
+        })
+      }
+
+      const title = data.senderTitle?.trim() ?? ""
+      if (title.length > EMAIL_SENDER_TITLE_MAX_LENGTH) {
+        ctx.addIssue({
+          code: "custom",
+          message: `Title must be ${EMAIL_SENDER_TITLE_MAX_LENGTH} characters or fewer`,
+          path: ["senderTitle"],
+        })
+      }
+    }
+
     if (data.recipientMode === "emails") {
       const parsed = parseEmailList(data.emails ?? "")
       if (parsed.length === 0) {

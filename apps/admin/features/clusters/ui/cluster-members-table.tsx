@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { RefreshCwIcon, UserMinusIcon } from "lucide-react"
 
 import { Badge } from "@gorro/ui/components/ui/badge"
@@ -15,14 +15,43 @@ import {
   TableRow,
 } from "@gorro/ui/components/ui/table"
 import {
+  CLUSTER_CURRENCY,
   CLUSTER_MEMBER_ROLE_LABELS,
   CLUSTER_MEMBER_STATUS_LABELS,
+  formatContributorStatus,
+  formatInviteRole,
 } from "@/features/clusters/constants"
 import type { ClusterMember } from "@/features/clusters/types"
 import { useClusterMembers } from "@/features/clusters/usecases"
 import { ClusterStatusBadge } from "@/features/clusters/ui/cluster-status-badge"
 import { RemoveClusterMemberDialog } from "@/features/clusters/ui/remove-cluster-member-dialog"
-import { formatDateTime } from "@gorro/ui/utils"
+import { formatCurrencyAmount, formatDateTime, formatSnakeCaseWords } from "@gorro/ui/utils"
+
+function SectionTable({
+  title,
+  description,
+  children,
+}: {
+  title: string
+  description: string
+  children: ReactNode
+}) {
+  return (
+    <section className="flex flex-col gap-2">
+      <div>
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <p className="text-xs text-muted-foreground">{description}</p>
+      </div>
+      <div className="overflow-hidden rounded-lg border">{children}</div>
+    </section>
+  )
+}
+
+function contributorVariant(status: string) {
+  if (status === "LINKED") return "success" as const
+  if (status === "REVOKED") return "destructive" as const
+  return "outline" as const
+}
 
 export function ClusterMembersTable({ clusterId }: { clusterId: string }) {
   const membersQuery = useClusterMembers(clusterId)
@@ -59,11 +88,16 @@ export function ClusterMembersTable({ clusterId }: { clusterId: string }) {
     setRemoveOpen(true)
   }
 
-  const members = membersQuery.data ?? []
+  const members = membersQuery.data?.items ?? []
+  const contributors = membersQuery.data?.contributors ?? []
+  const pendingInvites = membersQuery.data?.pendingInvites ?? []
 
   return (
-    <>
-      <div className="overflow-hidden rounded-lg border">
+    <div className="flex flex-col gap-6">
+      <SectionTable
+        title={`Members (${membersQuery.data?.totalMembers ?? members.length})`}
+        description="People with a Gorro account in this cluster."
+      >
         <Table>
           <TableHeader>
             <TableRow>
@@ -101,7 +135,8 @@ export function ClusterMembersTable({ clusterId }: { clusterId: string }) {
                   </TableCell>
                   <TableCell>
                     <Badge variant="secondary">
-                      {CLUSTER_MEMBER_ROLE_LABELS[member.role]}
+                      {CLUSTER_MEMBER_ROLE_LABELS[member.role] ??
+                        formatSnakeCaseWords(member.role)}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -135,7 +170,37 @@ export function ClusterMembersTable({ clusterId }: { clusterId: string }) {
             )}
           </TableBody>
         </Table>
-      </div>
+      </SectionTable>
+
+      <PeopleByPhoneTable
+        title={`Contributors (${membersQuery.data?.totalContributors ?? contributors.length})`}
+        description="Phone numbers tracked without a Gorro account. Contributions stay with the number if they later sign up."
+        emptyMessage="No contributors."
+        rows={contributors.map((contributor) => ({
+          id: contributor.contributorId,
+          name: contributor.name,
+          phoneNumber: contributor.phoneNumber,
+          detail: contributor.userId ? "Linked to an account" : "No account yet",
+          badge: formatContributorStatus(contributor.status),
+          badgeVariant: contributorVariant(contributor.status),
+          totalContributed: contributor.totalContributed,
+        }))}
+      />
+
+      <PeopleByPhoneTable
+        title={`Pending invites (${membersQuery.data?.totalPendingInvites ?? pendingInvites.length})`}
+        description="Invited by phone. Admin or member rights start when they verify that number, not when they register."
+        emptyMessage="No pending invites."
+        rows={pendingInvites.map((invite) => ({
+          id: invite.inviteId,
+          name: invite.name,
+          phoneNumber: invite.phoneNumber,
+          detail: formatInviteRole(invite.pendingRole),
+          badge: formatSnakeCaseWords(invite.status),
+          badgeVariant: "outline" as const,
+          totalContributed: invite.totalContributed,
+        }))}
+      />
 
       <RemoveClusterMemberDialog
         clusterId={clusterId}
@@ -143,6 +208,71 @@ export function ClusterMembersTable({ clusterId }: { clusterId: string }) {
         open={removeOpen}
         onOpenChange={setRemoveOpen}
       />
-    </>
+    </div>
+  )
+}
+
+function PeopleByPhoneTable({
+  title,
+  description,
+  emptyMessage,
+  rows,
+}: {
+  title: string
+  description: string
+  emptyMessage: string
+  rows: {
+    id: string
+    name: string | null
+    phoneNumber: string
+    detail: string
+    badge: string
+    badgeVariant: "success" | "destructive" | "outline"
+    totalContributed: number
+  }[]
+}) {
+  return (
+    <SectionTable title={title} description={description}>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Phone</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Contributed</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={4}
+                className="h-16 text-center text-muted-foreground"
+              >
+                {emptyMessage}
+              </TableCell>
+            </TableRow>
+          ) : (
+            rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>
+                  <p className="font-medium">{row.name || "—"}</p>
+                  <p className="text-xs text-muted-foreground">{row.detail}</p>
+                </TableCell>
+                <TableCell className="font-mono text-xs">
+                  {row.phoneNumber}
+                </TableCell>
+                <TableCell>
+                  <Badge variant={row.badgeVariant}>{row.badge}</Badge>
+                </TableCell>
+                <TableCell>
+                  {formatCurrencyAmount(row.totalContributed, CLUSTER_CURRENCY)}
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </SectionTable>
   )
 }

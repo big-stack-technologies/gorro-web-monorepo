@@ -40,6 +40,10 @@ import {
 } from "@gorro/ui/components/ui/select"
 import { Textarea } from "@gorro/ui/components/ui/textarea"
 import {
+  EMAIL_SENDER_NAME_MAX_LENGTH,
+  EMAIL_SENDER_TITLE_MAX_LENGTH,
+} from "@/features/reengagement/constants"
+import {
   parseEmailList,
   sendReengagementEmailFormSchema,
   type SendReengagementEmailFormValues,
@@ -59,16 +63,37 @@ const defaultValues: SendReengagementEmailFormValues = {
   emails: "",
   audience: "ALL",
   balanceBelow: undefined,
+  senderMode: "team",
+  senderName: "",
+  senderTitle: "",
+}
+
+function senderPayload(
+  values: SendReengagementEmailFormValues
+): Pick<SendReengagementEmailPayload, "senderName" | "senderTitle"> {
+  if (values.senderMode !== "person") return {}
+
+  const senderName = values.senderName?.trim()
+  if (!senderName) return {}
+
+  const senderTitle = values.senderTitle?.trim()
+  return {
+    senderName,
+    ...(senderTitle ? { senderTitle } : {}),
+  }
 }
 
 function toPayload(
   values: SendReengagementEmailFormValues
 ): SendReengagementEmailPayload {
+  const from = senderPayload(values)
+
   if (values.recipientMode === "emails") {
     return {
       subject: values.subject.trim(),
       body: values.body.trim(),
       emails: parseEmailList(values.emails ?? ""),
+      ...from,
     }
   }
 
@@ -79,7 +104,18 @@ function toPayload(
     ...(values.audience === "LOW_BALANCE" && values.balanceBelow != null
       ? { balanceBelow: values.balanceBelow }
       : {}),
+    ...from,
   }
+}
+
+function getSenderSummary(values: SendReengagementEmailFormValues) {
+  if (values.senderMode !== "person") return "The Gorro Team"
+
+  const name = values.senderName?.trim()
+  if (!name) return "The Gorro Team"
+
+  const title = values.senderTitle?.trim()
+  return title ? `${name}, ${title}` : name
 }
 
 function getRecipientSummary(
@@ -118,6 +154,8 @@ export function SendReengagementEmailForm() {
   const recipientMode = watch("recipientMode")
   const audience = watch("audience")
   const balanceBelow = watch("balanceBelow")
+  const senderMode = watch("senderMode")
+  const writingAsPerson = senderMode === "person"
   const pending = mutation.isPending
 
   const audiencesQuery = useReengagementAudiences(
@@ -157,6 +195,70 @@ export function SendReengagementEmailForm() {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <FieldGroup>
+              <Field data-invalid={errors.senderMode ? true : undefined}>
+                <FieldLabel htmlFor="email-sender">From</FieldLabel>
+                <Controller
+                  name="senderMode"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      disabled={pending}
+                    >
+                      <SelectTrigger
+                        id="email-sender"
+                        className="w-full min-w-0"
+                        aria-invalid={!!errors.senderMode}
+                      >
+                        <SelectValue placeholder="Choose a sender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="team">The Gorro Team</SelectItem>
+                        <SelectItem value="person">A person</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <FieldDescription>
+                  The Gorro Team signs off as the company. A person appears in
+                  the inbox as their name, still from the Gorro address.
+                </FieldDescription>
+                <FieldError errors={[errors.senderMode]} />
+              </Field>
+
+              {writingAsPerson ? (
+                <>
+                  <Field data-invalid={errors.senderName ? true : undefined}>
+                    <FieldLabel htmlFor="email-sender-name">Name</FieldLabel>
+                    <Input
+                      id="email-sender-name"
+                      placeholder="Ubong Essien"
+                      maxLength={EMAIL_SENDER_NAME_MAX_LENGTH}
+                      aria-invalid={!!errors.senderName}
+                      disabled={pending}
+                      {...register("senderName")}
+                    />
+                    <FieldError errors={[errors.senderName]} />
+                  </Field>
+                  <Field data-invalid={errors.senderTitle ? true : undefined}>
+                    <FieldLabel htmlFor="email-sender-title">Title</FieldLabel>
+                    <Input
+                      id="email-sender-title"
+                      placeholder="Founder & CEO"
+                      maxLength={EMAIL_SENDER_TITLE_MAX_LENGTH}
+                      aria-invalid={!!errors.senderTitle}
+                      disabled={pending}
+                      {...register("senderTitle")}
+                    />
+                    <FieldDescription>
+                      Optional. Shown under the name in the sign-off.
+                    </FieldDescription>
+                    <FieldError errors={[errors.senderTitle]} />
+                  </Field>
+                </>
+              ) : null}
+
               <Field data-invalid={errors.subject ? true : undefined}>
                 <FieldLabel htmlFor="email-subject">Subject</FieldLabel>
                 <Input
@@ -181,6 +283,9 @@ export function SendReengagementEmailForm() {
                 />
                 <FieldDescription>
                   Blank lines become separate paragraphs in the branded template.
+                  {writingAsPerson
+                    ? ' Writing as a person? Use "I" rather than "we".'
+                    : ""}
                 </FieldDescription>
                 <FieldError errors={[errors.body]} />
               </Field>
@@ -271,6 +376,10 @@ export function SendReengagementEmailForm() {
             <AlertDialogTitle>Send email?</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-2 text-sm text-muted-foreground">
+                <p>
+                  <span className="font-medium text-foreground">From:</span>{" "}
+                  {pendingValues ? getSenderSummary(pendingValues) : ""}
+                </p>
                 <p>
                   <span className="font-medium text-foreground">Subject:</span>{" "}
                   {pendingValues?.subject}
