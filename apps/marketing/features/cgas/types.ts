@@ -164,6 +164,36 @@ export type CgaTrendsFilters = CgaMetricsFilters & {
 export type CgaPerformanceFilters = {
   from?: string
   to?: string
-  territoryId: string
+  territoryId?: string
   product?: "ajo" | "cluster" | "circle" | "savings"
+}
+
+export type FieldReportComparisonRow = {
+  userId: string
+  name: string
+  reportedRegistrations: number
+  actualSignups: number
+  variance: number
+  reportedKyc: number
+  actualKyc: number
+  kycVariance: number
+  reportedFirstDeposits: number
+  actualFirstDeposits: number
+  firstDepositVariance: number
+  reportedDepositValue: number
+  actualDepositValue: number
+  depositValueVariance: number
+  daysReported: number
+  reportingCompliancePct: number
+}
+
+export type FieldReportComparison = {
+  from: string | null
+  to: string | null
+  rows: FieldReportComparisonRow[]
+}
+
+export type FieldReportComparisonFilters = {
+  from?: string
+  to?: string
 }

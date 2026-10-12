@@ -14,7 +14,7 @@ import {
 import { formatNgn, formatSnakeCaseWords } from "@gorro/ui/utils"
 
 import { SortHeader } from "@/features/cgas/columns/column-utils"
-import { CGA_STATUS_LABELS } from "@/features/cgas/constants"
+import { CGA_KPI_LABELS, CGA_STATUS_LABELS } from "@/features/cgas/constants"
 import type { CgaActionSubject, CgaPerformanceRow } from "@/features/cgas/types"
 
 function statusVariant(status: string) {
@@ -34,8 +34,31 @@ export function createCgaPerformanceColumns(options: {
     },
     {
       accessorKey: "signups",
-      header: ({ column }) => <SortHeader label="Sign-ups" column={column} />,
+      header: ({ column }) => (
+        <SortHeader label={CGA_KPI_LABELS.signups} column={column} />
+      ),
       cell: ({ row }) => row.original.signups.toLocaleString(),
+    },
+    {
+      accessorKey: "kycCompleted",
+      header: ({ column }) => (
+        <SortHeader label={CGA_KPI_LABELS.kycCompleted} column={column} />
+      ),
+      cell: ({ row }) => row.original.kycCompleted.toLocaleString(),
+    },
+    {
+      accessorKey: "firstDeposits",
+      header: ({ column }) => (
+        <SortHeader label={CGA_KPI_LABELS.firstDeposits} column={column} />
+      ),
+      cell: ({ row }) => row.original.firstDeposits.toLocaleString(),
+    },
+    {
+      accessorKey: "gtv",
+      header: ({ column }) => (
+        <SortHeader label={CGA_KPI_LABELS.gtv} column={column} />
+      ),
+      cell: ({ row }) => formatNgn(row.original.gtv),
     },
     {
       accessorKey: "firstDepositRate",
@@ -43,11 +66,6 @@ export function createCgaPerformanceColumns(options: {
         <SortHeader label="First deposit %" column={column} />
       ),
       cell: ({ row }) => `${row.original.firstDepositRate}%`,
-    },
-    {
-      accessorKey: "gtv",
-      header: ({ column }) => <SortHeader label="GTV" column={column} />,
-      cell: ({ row }) => formatNgn(row.original.gtv),
     },
     {
       accessorKey: "productAdoption",

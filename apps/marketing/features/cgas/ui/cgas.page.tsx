@@ -12,15 +12,18 @@ import {
   TabsTrigger,
 } from "@gorro/ui/components/ui/tabs"
 
-import { cgaMetricsSummaryColumns } from "@/features/cgas/columns/cga-metrics-summary.columns"
+import { fieldReportComparisonColumns } from "@/features/cgas/columns/field-report-comparison.columns"
 import { createCgaPerformanceColumns } from "@/features/cgas/columns/cga-performance.columns"
 import { createCgaPlacementsColumns } from "@/features/cgas/columns/cga-placements.columns"
+import { CGA_KPI_LABELS } from "@/features/cgas/constants"
 import {
+  COMPARISON_FILTER_KEYS,
+  comparisonFilterFields,
+  comparisonFiltersFromActive,
+  currentMonthComparisonDefaults,
+  currentMonthPerformanceDefaults,
   performanceFilterFields,
   performanceFiltersFromActive,
-  referralFilterFields,
-  referralFiltersFromActive,
-  REFERRAL_FILTER_KEYS,
   trendsFilterFields,
   trendsFiltersFromActive,
   TRENDS_DEFAULT_FILTERS,
@@ -33,7 +36,11 @@ import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
 import { CgaTargetDialog } from "@/features/cgas/ui/cga-target-dialog"
 import { CgaTrendsChart } from "@/features/cgas/ui/cga-trends-chart"
 import type { CgaActionSubject } from "@/features/cgas/types"
-import { useCgaPageData, useTerritories } from "@/features/cgas/usecases"
+import {
+  useCgaPageData,
+  useFieldReportComparison,
+  useTerritories,
+} from "@/features/cgas/usecases"
 import {
   SectionError,
   SectionHeading,
@@ -69,25 +76,26 @@ export function CgasPage() {
 
   const territories = useTerritories()
 
-  const performanceTerritoryDefault = React.useMemo(() => {
-    const first =
-      territories.data?.find((t) => t.isActive) ?? territories.data?.[0]
-    return first ? { perfTerritory: first.id } : undefined
-  }, [territories.data])
+  const monthPerformanceDefaults = React.useMemo(
+    () => currentMonthPerformanceDefaults(),
+    []
+  )
+  const monthComparisonDefaults = React.useMemo(
+    () => currentMonthComparisonDefaults(),
+    []
+  )
 
-  const referralFilters = useLocalFilters(REFERRAL_FILTER_KEYS)
   const trendsFilters = useLocalFilters(
     TRENDS_FILTER_KEYS,
     TRENDS_DEFAULT_FILTERS
   )
   const performanceFilters = useLocalFilters(
     PERFORMANCE_FILTER_KEYS,
-    performanceTerritoryDefault
+    monthPerformanceDefaults
   )
-
-  const referralApiFilters = React.useMemo(
-    () => referralFiltersFromActive(referralFilters.activeFilters),
-    [referralFilters.activeFilters]
+  const comparisonFilters = useLocalFilters(
+    COMPARISON_FILTER_KEYS,
+    monthComparisonDefaults
   )
 
   const trendsApiFilters = React.useMemo(
@@ -100,20 +108,19 @@ export function CgasPage() {
     [performanceFilters.activeFilters]
   )
 
+  const comparisonApiFilters = React.useMemo(
+    () => comparisonFiltersFromActive(comparisonFilters.activeFilters),
+    [comparisonFilters.activeFilters]
+  )
+
   const perfFilterFieldDefs = React.useMemo(
     () => performanceFilterFields(territories.data ?? []),
     [territories.data]
   )
 
-  const { summary, placements, performance } = useCgaPageData(
-    referralApiFilters,
-    performanceApiFilters
-  )
+  const { placements, performance } = useCgaPageData(performanceApiFilters)
+  const comparison = useFieldReportComparison(comparisonApiFilters)
 
-  const summaryRows = React.useMemo(
-    () => summary.data?.data ?? [],
-    [summary.data?.data]
-  )
   const placementRows = React.useMemo(
     () => placements.data ?? [],
     [placements.data]
@@ -121,6 +128,10 @@ export function CgasPage() {
   const performanceRows = React.useMemo(
     () => performance.data?.cgas ?? [],
     [performance.data?.cgas]
+  )
+  const comparisonRows = React.useMemo(
+    () => comparison.data?.rows ?? [],
+    [comparison.data?.rows]
   )
 
   const performanceColumns = React.useMemo(
@@ -143,8 +154,8 @@ export function CgasPage() {
   return (
     <div className="flex flex-col gap-8 px-4 pb-8 lg:px-6">
       <AdminPageHeader
-        title="CGA metrics & performance"
-        description="Referral metrics, org placement, and territory-scoped performance are loaded from separate endpoints."
+        title="CGA performance"
+        description="Signups, KYCs, first deposits, and deposit value for the selected period. Dates default to this month."
       />
 
       <CgaSection
@@ -164,13 +175,13 @@ export function CgasPage() {
         </div>
       </CgaSection>
 
-      <Tabs defaultValue="referral-leaderboard" className="gap-6">
+      <Tabs defaultValue="performance" className="gap-6">
         <TabsList className="h-9 w-full max-w-full justify-start overflow-x-auto overflow-y-hidden sm:w-fit">
           <TabsTrigger
-            value="referral-leaderboard"
+            value="performance"
             className="flex-none text-xs sm:text-sm"
           >
-            CGA referral leaderboard
+            Performance
           </TabsTrigger>
           <TabsTrigger
             value="roster-placement"
@@ -182,32 +193,48 @@ export function CgasPage() {
             value="territory-performance"
             className="flex-none text-xs sm:text-sm"
           >
-            Territory performance ranking
+            Territory ranking
+          </TabsTrigger>
+          <TabsTrigger
+            value="reported-vs-measured"
+            className="flex-none text-xs sm:text-sm"
+          >
+            Reported vs measured
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="referral-leaderboard" className="mt-0">
+        <TabsContent value="performance" className="mt-0">
           <CgaSection
-            title="CGA referral leaderboard"
-            description="Lifetime and in-range referrals, bonus earned, savings opened, and book value."
+            title="CGA performance"
+            description="Signups, KYCs completed, first deposits, and deposit value. Deposit value is deposits only."
           >
-            {summary.isError ? (
+            {performanceMeta ? (
+              <p className="text-xs text-muted-foreground">
+                Period {performanceMeta.period.from.slice(0, 10)} –{" "}
+                {performanceMeta.period.to.slice(0, 10)} · Month pace{" "}
+                {performanceMeta.pacePct}% · Headline metric:{" "}
+                {CGA_KPI_LABELS[
+                  performanceMeta.headlineMetric as keyof typeof CGA_KPI_LABELS
+                ] ?? performanceMeta.headlineMetric}
+              </p>
+            ) : null}
+            {performance.isError ? (
               <SectionError
-                error={summary.error}
-                onRetry={() => void summary.refetch()}
+                error={performance.error}
+                onRetry={() => void performance.refetch()}
               />
             ) : (
               <CgaSortableTable
-                data={summaryRows}
-                columns={cgaMetricsSummaryColumns}
-                isLoading={summary.isLoading}
-                emptyMessage="No CGAs in this summary range."
-                defaultSorting={[{ id: "newReferralsInRange", desc: true }]}
+                data={performanceRows}
+                columns={performanceColumns}
+                isLoading={performance.isLoading}
+                emptyMessage="No CGA performance for this period."
+                defaultSorting={[{ id: "gtv", desc: true }]}
                 onRowClick={(row) => goToCustomers(row.userId)}
-                filterFields={referralFilterFields}
-                activeFilters={referralFilters.activeFilters}
-                setFilters={referralFilters.setFilters}
-                clearFilters={referralFilters.clearFilters}
+                filterFields={perfFilterFieldDefs}
+                activeFilters={performanceFilters.activeFilters}
+                setFilters={performanceFilters.setFilters}
+                clearFilters={performanceFilters.clearFilters}
               />
             )}
           </CgaSection>
@@ -238,17 +265,9 @@ export function CgasPage() {
 
         <TabsContent value="territory-performance" className="mt-0">
           <CgaSection
-            title="Territory performance ranking"
-            description="Sign-ups, first-deposit rate, GTV, monthly targets, and pace-based status for the selected territory."
+            title="Territory ranking"
+            description="Same period as Performance. Narrow with the territory filter, or leave it on all territories."
           >
-            {performanceMeta ? (
-              <p className="text-xs text-muted-foreground">
-                Period {performanceMeta.period.from.slice(0, 10)} –{" "}
-                {performanceMeta.period.to.slice(0, 10)} · Month pace{" "}
-                {performanceMeta.pacePct}% · Headline metric:{" "}
-                {performanceMeta.headlineMetric}
-              </p>
-            ) : null}
             {performance.isError ? (
               <SectionError
                 error={performance.error}
@@ -256,23 +275,42 @@ export function CgasPage() {
               />
             ) : (
               <CgaSortableTable
-                data={performanceApiFilters ? performanceRows : []}
+                data={performanceRows}
                 columns={performanceColumns}
-                isLoading={
-                  territories.isLoading ||
-                  (performanceApiFilters != null && performance.isLoading)
-                }
-                emptyMessage={
-                  performanceApiFilters
-                    ? "No performance rows for this territory."
-                    : "Select a territory and apply filters to load performance."
-                }
+                isLoading={performance.isLoading}
+                emptyMessage="No performance rows for this period."
                 defaultSorting={[{ id: "gtv", desc: true }]}
                 onRowClick={(row) => goToCustomers(row.userId)}
                 filterFields={perfFilterFieldDefs}
                 activeFilters={performanceFilters.activeFilters}
                 setFilters={performanceFilters.setFilters}
                 clearFilters={performanceFilters.clearFilters}
+              />
+            )}
+          </CgaSection>
+        </TabsContent>
+
+        <TabsContent value="reported-vs-measured" className="mt-0">
+          <CgaSection
+            title="Reported vs measured"
+            description="What each CGA reported on field reports, next to what the system measured. A positive variance means the system saw more than the CGA claimed."
+          >
+            {comparison.isError ? (
+              <SectionError
+                error={comparison.error}
+                onRetry={() => void comparison.refetch()}
+              />
+            ) : (
+              <CgaSortableTable
+                data={comparisonRows}
+                columns={fieldReportComparisonColumns}
+                isLoading={comparison.isLoading}
+                emptyMessage="No field-report comparison for this period."
+                defaultSorting={[{ id: "variance", desc: true }]}
+                filterFields={comparisonFilterFields}
+                activeFilters={comparisonFilters.activeFilters}
+                setFilters={comparisonFilters.setFilters}
+                clearFilters={comparisonFilters.clearFilters}
               />
             )}
           </CgaSection>

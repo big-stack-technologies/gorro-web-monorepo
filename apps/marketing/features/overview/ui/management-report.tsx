@@ -155,7 +155,7 @@ export function ManagementReport({
     <section className="space-y-6" aria-label="Management summary">
       <SectionHeading
         title="Management summary"
-        description="Funnel, retention, and the best and weakest CGAs by GTV."
+        description="Funnel, retention, and the best and weakest CGAs by deposit value."
       />
       {isLoading ? (
         <div className="space-y-3">
@@ -175,7 +175,7 @@ export function ManagementReport({
           <div className="space-y-3">
             <SectionHeading
               title="People"
-              description={`Best and weakest of ${report.people.cgaCount.toLocaleString()} CGAs, ranked by GTV rather than sign-ups.`}
+              description={`Best and weakest of ${report.people.cgaCount.toLocaleString()} CGAs, ranked by deposit value rather than sign-ups.`}
             />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <PersonCard title="Best CGA" person={report.people.best} />

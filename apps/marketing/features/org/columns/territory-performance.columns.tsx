@@ -35,7 +35,7 @@ export const territoryPerformanceColumns: ColumnDef<TerritoryPerformanceRow>[] =
     {
       accessorKey: "gtvPerCga",
       header: ({ column }) => (
-        <SortHeader label="GTV per CGA" column={column} />
+        <SortHeader label="Deposit value per CGA" column={column} />
       ),
       cell: ({ row }) => (
         <span className={highlightClass}>{formatNgn(row.original.gtvPerCga)}</span>
@@ -66,7 +66,7 @@ export const territoryPerformanceColumns: ColumnDef<TerritoryPerformanceRow>[] =
     },
     {
       accessorKey: "gtv",
-      header: ({ column }) => <SortHeader label="GTV" column={column} />,
+      header: ({ column }) => <SortHeader label="Deposit value" column={column} />,
       cell: ({ row }) => formatNgn(row.original.gtv),
     },
     {

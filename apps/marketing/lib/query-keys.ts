@@ -16,6 +16,8 @@ export const QUERY_KEYS = {
     list: ["marketing", "cgas", "list"] as const,
     performance: (filters: Record<string, string>) =>
       ["marketing", "cgas", "performance", filters] as const,
+    fieldReportComparison: (filters: Record<string, string>) =>
+      ["marketing", "cgas", "field-report-comparison", filters] as const,
     territories: ["marketing", "cgas", "territories"] as const,
     teamLeads: ["marketing", "cgas", "team-leads"] as const,
     customers: (userId: string) =>

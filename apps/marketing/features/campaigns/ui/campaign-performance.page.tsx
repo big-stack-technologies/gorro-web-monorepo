@@ -147,7 +147,7 @@ export function CampaignPerformancePage({ id }: { id: string }) {
           label="Transactions"
           value={data.transactions.toLocaleString()}
         />
-        <MetricCard label="GTV" value={formatNgn(data.gtv)} />
+        <MetricCard label="Deposit value" value={formatNgn(data.gtv)} />
         <MetricCard
           label="Signup → deposit"
           value={`${data.signupToDepositPct.toFixed(1)}%`}

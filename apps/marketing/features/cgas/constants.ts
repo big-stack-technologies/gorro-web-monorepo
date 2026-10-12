@@ -19,6 +19,13 @@ export const CGA_TARGET_METRICS = Object.entries(METRIC_LABELS).map(
   ([value, label]) => ({ value, label })
 )
 
+export const CGA_KPI_LABELS = {
+  signups: "Signups",
+  kycCompleted: "KYCs",
+  firstDeposits: "First deposits",
+  gtv: "Deposit value",
+} as const
+
 export const CGA_STATUS_LABELS: Record<string, string> = {
   ON_TRACK: "On track",
   AT_RISK: "At risk",

@@ -48,7 +48,8 @@ export function SetTargetDialog({ open, onOpenChange }: SetTargetDialogProps) {
           <DialogTitle>Set monthly target</DialogTitle>
           <DialogDescription>
             Org-wide marketing targets. Rates are whole percentages; counts and
-            GTV are absolute values. The month is pinned to the 1st in UTC.
+            deposit value are absolute amounts. The month is pinned to the 1st
+            in UTC.
           </DialogDescription>
         </DialogHeader>
         <form

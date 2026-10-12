@@ -104,7 +104,7 @@ export function TerritoriesPage() {
         <TabsContent value="performance" className="mt-0 flex flex-col gap-6">
           <SectionHeading
             title="Territory comparison"
-            description="GTV per CGA and sign-ups per CGA are the fairest comparisons. Unassigned stays last and covers CGAs with no territory. Customers with no CGA attribution are not in any territory and do not appear here."
+            description="Deposit value per CGA and sign-ups per CGA are the fairest comparisons. Unassigned stays last and covers CGAs with no territory. Customers with no CGA attribution are not in any territory and do not appear here."
           />
           <DataTableFilterBar
             fields={territoryPerformanceFilterFields}

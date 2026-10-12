@@ -17,7 +17,7 @@ export const TRENDS_METRICS: {
 }[] = [
   { value: "signups", label: "Sign-ups" },
   { value: "transactions", label: "Transactions" },
-  { value: "gtv", label: "GTV" },
+  { value: "gtv", label: "Deposit value" },
   { value: "kyc_completed", label: "KYC completed" },
 ]
 
