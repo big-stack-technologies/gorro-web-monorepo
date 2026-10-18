@@ -5,15 +5,42 @@ import {
   CGA_TREND_INTERVALS,
   DEFAULT_TREND_INTERVAL,
 } from "@/features/cgas/constants"
-
-export const TRENDS_DEFAULT_FILTERS = {
-  refInterval: DEFAULT_TREND_INTERVAL,
-} as const
 import type {
   CgaMetricsFilters,
   CgaPerformanceFilters,
   CgaTrendsFilters,
+  FieldReportComparisonFilters,
 } from "@/features/cgas/types"
+
+export const TRENDS_DEFAULT_FILTERS = {
+  refInterval: DEFAULT_TREND_INTERVAL,
+} as const
+
+/** Local calendar month as the date picker's ISO start/end values. */
+export function currentMonthRange() {
+  const now = new Date()
+  const from = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0)
+  const to = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999
+  )
+  return { from: from.toISOString(), to: to.toISOString() }
+}
+
+export function currentMonthPerformanceDefaults() {
+  const { from, to } = currentMonthRange()
+  return { perfFrom: from, perfTo: to }
+}
+
+export function currentMonthComparisonDefaults() {
+  const { from, to } = currentMonthRange()
+  return { cmpFrom: from, cmpTo: to }
+}
 
 /** Referral metrics summary filter bar field keys. */
 export const REFERRAL_FILTER_KEYS = [
@@ -31,6 +58,8 @@ export const PERFORMANCE_FILTER_KEYS = [
   "perfProduct",
   "perfTerritory",
 ] as const
+
+export const COMPARISON_FILTER_KEYS = ["cmpFrom", "cmpTo"] as const
 
 export const referralFilterFields: readonly DataTableFilterField[] = [
   {
@@ -104,7 +133,7 @@ export function performanceFilterFields(
       type: "select",
       param: "perfTerritory",
       label: "Territory",
-      clearable: false,
+      emptyLabel: "All territories",
       options: territories.map((territory) => ({
         value: territory.id,
         label: `${territory.name} (${territory.code})`,
@@ -112,6 +141,21 @@ export function performanceFilterFields(
     },
   ]
 }
+
+export const comparisonFilterFields: readonly DataTableFilterField[] = [
+  {
+    type: "date",
+    param: "cmpFrom",
+    label: "From",
+    boundary: "startOfDay",
+  },
+  {
+    type: "date",
+    param: "cmpTo",
+    label: "To",
+    boundary: "endOfDay",
+  },
+]
 
 export function referralFiltersFromActive(
   active: Record<string, string>
@@ -139,12 +183,11 @@ export function trendsFiltersFromActive(
 
 export function performanceFiltersFromActive(
   active: Record<string, string>
-): CgaPerformanceFilters | null {
+): CgaPerformanceFilters {
   const territoryId = active.perfTerritory?.trim()
-  if (!territoryId) return null
   const product = active.perfProduct?.trim()
   return {
-    territoryId,
+    territoryId: territoryId || undefined,
     from: active.perfFrom || undefined,
     to: active.perfTo || undefined,
     product:
@@ -154,5 +197,14 @@ export function performanceFiltersFromActive(
       product === "savings"
         ? product
         : undefined,
+  }
+}
+
+export function comparisonFiltersFromActive(
+  active: Record<string, string>
+): FieldReportComparisonFilters {
+  return {
+    from: active.cmpFrom || undefined,
+    to: active.cmpTo || undefined,
   }
 }

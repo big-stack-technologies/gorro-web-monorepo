@@ -79,7 +79,7 @@ export const teamLeadPerformanceColumns: ColumnDef<TeamLeadPerformanceRow>[] = [
   },
   {
     accessorKey: "gtv",
-    header: ({ column }) => <SortHeader label="GTV" column={column} />,
+    header: ({ column }) => <SortHeader label="Deposit value" column={column} />,
     cell: ({ row }) => formatNgn(row.original.gtv),
   },
   {

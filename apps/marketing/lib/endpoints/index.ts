@@ -9,6 +9,7 @@ export const endpoints = {
     alerts: "/admin/marketing/alerts",
     cgas: "/admin/marketing/cgas",
     cgasPerformance: "/admin/marketing/cgas/performance",
+    fieldReportsComparison: "/admin/marketing/field-reports/comparison",
     cgaCustomers: (userId: string) =>
       `/admin/marketing/cgas/${encodeURIComponent(userId)}/customers`,
     cgaTargets: (userId: string) =>

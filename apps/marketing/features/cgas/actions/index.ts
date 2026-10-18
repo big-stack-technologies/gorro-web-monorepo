@@ -1,6 +1,7 @@
 export { getCgaMetricsSummaryAction } from "./get-cga-metrics-summary"
 export { getCgaMetricsTrendsAction } from "./get-cga-metrics-trends"
 export { getCgaPerformanceAction } from "./get-cga-performance"
+export { getFieldReportComparisonAction } from "./get-field-report-comparison"
 export { listCgaCustomersAction } from "./list-cga-customers"
 export { listMarketingCgasAction } from "./list-marketing-cgas"
 export { listTeamLeadsAction } from "./list-team-leads"

@@ -55,8 +55,8 @@ export function CgaTargetDialog({
         <DialogHeader className="border-b px-4 py-4">
           <DialogTitle>Set monthly target</DialogTitle>
           <DialogDescription>
-            {cga.name}. Rates are whole percentages; counts and GTV are absolute
-            values.
+            {cga.name}. Rates are whole percentages; counts and deposit value are
+            absolute values.
           </DialogDescription>
         </DialogHeader>
         <form

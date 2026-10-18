@@ -3,14 +3,10 @@
 import { useQuery } from "@tanstack/react-query"
 
 import {
-  getCgaMetricsSummaryAction,
   getCgaPerformanceAction,
   listMarketingCgasAction,
 } from "@/features/cgas/actions"
-import type {
-  CgaMetricsFilters,
-  CgaPerformanceFilters,
-} from "@/features/cgas/types"
+import type { CgaPerformanceFilters } from "@/features/cgas/types"
 import { QUERY_KEYS } from "@/lib/query-keys"
 
 function filtersKey(filters: Record<string, string | undefined>) {
@@ -19,20 +15,9 @@ function filtersKey(filters: Record<string, string | undefined>) {
   ) as Record<string, string>
 }
 
-/** Loads the three CGA endpoints separately (no client merge). */
-export function useCgaPageData(
-  metricsFilters: CgaMetricsFilters,
-  performanceFilters: CgaPerformanceFilters | null
-) {
-  const metricsKey = filtersKey(metricsFilters)
-  const performanceKey = performanceFilters
-    ? filtersKey(performanceFilters)
-    : null
-
-  const summary = useQuery({
-    queryKey: QUERY_KEYS.cgas.metricsSummary(metricsKey),
-    queryFn: () => getCgaMetricsSummaryAction(metricsFilters),
-  })
+/** Loads roster placement and period performance. Performance is the KPI source. */
+export function useCgaPageData(performanceFilters: CgaPerformanceFilters) {
+  const performanceKey = filtersKey(performanceFilters)
 
   const placements = useQuery({
     queryKey: QUERY_KEYS.cgas.list,
@@ -40,15 +25,11 @@ export function useCgaPageData(
   })
 
   const performance = useQuery({
-    queryKey: performanceKey
-      ? QUERY_KEYS.cgas.performance(performanceKey)
-      : ["marketing", "cgas", "performance", "disabled"],
-    queryFn: () => getCgaPerformanceAction(performanceFilters!),
-    enabled:
-      performanceFilters != null && Boolean(performanceFilters.territoryId),
+    queryKey: QUERY_KEYS.cgas.performance(performanceKey),
+    queryFn: () => getCgaPerformanceAction(performanceFilters),
   })
 
-  return { summary, placements, performance }
+  return { placements, performance }
 }
 
 /** @deprecated Use useCgaPageData */

@@ -32,7 +32,7 @@ export const METRIC_LABELS: Record<string, string> = {
   active_users: "Active users",
   dormant_users: "Dormant users",
   total_transactions: "Transactions",
-  gtv: "GTV",
+  gtv: "Deposit value",
   active_ajo_groups: "Active ajo groups",
   ajo_fill_rate: "Ajo fill rate",
   active_clusters: "Active clusters",

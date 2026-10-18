@@ -2,6 +2,7 @@
 
 import { get } from "@gorro/api/client"
 
+import { formatDateParam } from "@/features/analytics/actions/build-params"
 import { endpoints } from "@/lib/endpoints"
 
 import type {
@@ -13,11 +14,10 @@ export async function getCgaPerformanceAction(
   filters: CgaPerformanceFilters
 ): Promise<CgaPerformanceResponse> {
   try {
-    const params: Record<string, string> = {
-      territoryId: filters.territoryId,
-    }
-    if (filters.from) params.from = filters.from
-    if (filters.to) params.to = filters.to
+    const params: Record<string, string> = {}
+    if (filters.territoryId) params.territoryId = filters.territoryId
+    if (filters.from) params.from = formatDateParam(filters.from)
+    if (filters.to) params.to = formatDateParam(filters.to)
     if (filters.product) params.product = filters.product
 
     const { data } = await get<CgaPerformanceResponse>(

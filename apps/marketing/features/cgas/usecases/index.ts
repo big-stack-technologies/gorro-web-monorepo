@@ -1,4 +1,5 @@
 export { useCgaLeaderboard, useCgaPageData } from "./use-cga-leaderboard"
+export { useFieldReportComparison } from "./use-field-report-comparison"
 export { useMarketingCgas } from "./use-marketing-cgas"
 export { useCgaMetricsTrends } from "./use-cga-metrics-trends"
 export { useSetCgaTarget } from "./use-set-cga-target"
