@@ -122,4 +122,11 @@ export const QUERY_KEYS = {
     addressDetail: (id: string) =>
       ["kyc-reviews", "address", "detail", id] as const,
   },
+
+  walletCredits: {
+    all: ["wallet-credits"] as const,
+    list: ["wallet-credits", "list"] as const,
+    wallets: (key: Record<string, string>) =>
+      ["wallet-credits", "wallets", key] as const,
+  },
 } as const

@@ -106,6 +106,8 @@ export const endpoints = {
       `/admin/kyc/address-reviews/${encodeURIComponent(id)}/approve`,
     kycAddressReviewRejectById: (id: string) =>
       `/admin/kyc/address-reviews/${encodeURIComponent(id)}/reject`,
+    walletCredits: "/admin/wallet-credits",
+    walletCreditsWallets: "/admin/wallet-credits/wallets",
   },
   uploads: {
     file: "/uploads/file",
