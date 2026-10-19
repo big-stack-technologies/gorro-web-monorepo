@@ -62,6 +62,9 @@ export const routes = {
       detail: (id: string) =>
         `/admin/kyc/address-reviews/${encodeURIComponent(id)}`,
     },
+    walletCredits: {
+      base: "/admin/wallet-credits",
+    },
   },
 } as const
 

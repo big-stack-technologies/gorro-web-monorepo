@@ -33,11 +33,17 @@ import {
   BellRingIcon,
   IdCardIcon,
   HouseIcon,
+  WalletIcon,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-import { canManageClusters, canManageReengagement, isPartnerOnly } from "@/features/auth/access"
+import {
+  canManageClusters,
+  canManageReengagement,
+  isPartnerOnly,
+  isSuperAdmin,
+} from "@/features/auth/access"
 import { useGetProfile } from "@gorro/auth/use-get-profile"
 import { routes } from "@/lib/routes"
 
@@ -64,6 +70,11 @@ const data = {
           title: "Transactions",
           url: routes.protected.transactions.base,
           icon: <ArrowLeftRightIcon />,
+        },
+        {
+          title: "Wallet credits",
+          url: routes.protected.walletCredits.base,
+          icon: <WalletIcon />,
         },
         {
           title: "Withdrawal requests",
@@ -245,6 +256,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         }
         if (item.url === routes.protected.reengagement.base) {
           return reengagementAllowed
+        }
+        if (item.url === routes.protected.walletCredits.base) {
+          return isSuperAdmin(profile?.roles)
         }
         return true
       }),

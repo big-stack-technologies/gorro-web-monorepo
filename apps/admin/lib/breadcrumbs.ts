@@ -157,6 +157,14 @@ export function getAdminBreadcrumbSegments(pathname: string): BreadcrumbSegment[
     ]
   }
 
+  const walletCredits = routes.protected.walletCredits.base
+  if (normalized === walletCredits) {
+    return [
+      { label: "Dashboard", href: admin },
+      { label: "Wallet credits" },
+    ]
+  }
+
   if (normalized.startsWith(`${admin}/`)) {
     const rest = normalized.slice(admin.length + 1)
     const first = rest.split("/")[0] ?? ""
