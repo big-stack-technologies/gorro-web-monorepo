@@ -5,6 +5,7 @@ import Link from "next/link"
 import {
   DownloadIcon,
   FilterIcon,
+  LandmarkIcon,
   LayoutDashboardIcon,
   Building2Icon,
   MapIcon,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react"
 
 import { AuthNavUser } from "@gorro/auth/auth-nav-user"
+import { useGetProfile } from "@gorro/auth/use-get-profile"
 import { NavMain } from "@gorro/ui/components/nav-main"
 import { Badge } from "@gorro/ui/components/ui/badge"
 import {
@@ -28,6 +30,7 @@ import {
   SidebarMenuItem,
 } from "@gorro/ui/components/ui/sidebar"
 
+import { canViewFinance } from "@/features/finance/constants"
 import { logoutAction } from "@/lib/auth-actions"
 import { routes } from "@/lib/routes"
 
@@ -87,6 +90,16 @@ const navMain = [
     ],
   },
   {
+    title: "Finance",
+    items: [
+      {
+        title: "Finance",
+        url: routes.finance,
+        icon: <LandmarkIcon />,
+      },
+    ],
+  },
+  {
     title: "Organization",
     items: [
       {
@@ -111,6 +124,18 @@ const navMain = [
 export function AppSidebar(
   props: React.ComponentProps<typeof Sidebar>
 ) {
+  const { data: profile } = useGetProfile()
+  const financeAllowed = canViewFinance(profile?.roles)
+
+  const sections = navMain
+    .map((section) => ({
+      ...section,
+      items: section.items.filter(
+        (item) => item.url !== routes.finance || financeAllowed
+      ),
+    }))
+    .filter((section) => section.items.length > 0)
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -149,7 +174,7 @@ export function AppSidebar(
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain sections={navMain} homeUrl={routes.home} />
+        <NavMain sections={sections} homeUrl={routes.home} />
       </SidebarContent>
       <SidebarFooter>
         <AuthNavUser onLogout={logoutAction} />
