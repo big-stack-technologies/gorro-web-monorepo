@@ -34,6 +34,16 @@ export const QUERY_KEYS = {
     trends: (filters: Record<string, string>) =>
       ["marketing", "analytics", "trends", filters] as const,
   },
+  finance: {
+    all: ["marketing", "finance"] as const,
+    daily: (filters: Record<string, string>) =>
+      ["marketing", "finance", "daily", filters] as const,
+    revenue: (filters: Record<string, string>) =>
+      ["marketing", "finance", "revenue", filters] as const,
+    costs: (filters: Record<string, string>) =>
+      ["marketing", "finance", "costs", filters] as const,
+    liquidity: ["marketing", "finance", "liquidity"] as const,
+  },
   targets: {
     all: ["marketing", "targets"] as const,
     list: (filters: Record<string, string>) =>

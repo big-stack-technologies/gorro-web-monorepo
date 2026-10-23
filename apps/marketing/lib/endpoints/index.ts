@@ -1,4 +1,11 @@
 export const endpoints = {
+  finance: {
+    daily: "/admin/finance/daily",
+    revenue: "/admin/finance/revenue",
+    costs: "/admin/finance/costs",
+    liquidity: "/admin/finance/liquidity",
+    export: "/admin/finance/export",
+  },
   cga: {
     metricsSummary: "/admin/cga/metrics/summary",
     metricsTrends: "/admin/cga/metrics/trends",
