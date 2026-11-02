@@ -5,6 +5,7 @@ export type SavingsMetricsProduct =
   | "FIXED"
   | "TARGET"
   | "VAULT"
+  | "CIRCLE"
 
 export type SavingsAccountStatus =
   | "ACTIVE"

@@ -29,6 +29,7 @@ import {
   FlagIcon,
   HandCoinsIcon,
   Layers3Icon,
+  CircleDashedIcon,
   CircleDollarSignIcon,
   BellRingIcon,
   IdCardIcon,
@@ -40,6 +41,7 @@ import Link from "next/link"
 
 import {
   canManageClusters,
+  canViewCircles,
   canManageReengagement,
   isPartnerOnly,
   isSuperAdmin,
@@ -120,6 +122,11 @@ const data = {
           title: "Clusters",
           url: routes.protected.clusters.base,
           icon: <Layers3Icon />,
+        },
+        {
+          title: "Circles",
+          url: routes.protected.circles.base,
+          icon: <CircleDashedIcon />,
         },
       ],
     },
@@ -237,6 +244,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const partnerOnly = isPartnerOnly(profile?.roles)
   const clustersAllowed = canManageClusters(profile?.roles)
   const reengagementAllowed = canManageReengagement(profile?.roles)
+  const circlesAllowed = canViewCircles(profile?.roles)
 
   const navMain = data.navMain
     .map((section) => ({
@@ -253,6 +261,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           item.url === routes.protected.clusters.withdrawals
         ) {
           return clustersAllowed
+        }
+        if (item.url === routes.protected.circles.base) {
+          return circlesAllowed
         }
         if (item.url === routes.protected.reengagement.base) {
           return reengagementAllowed

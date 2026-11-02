@@ -18,6 +18,7 @@ export function getAdminBreadcrumbSegments(pathname: string): BreadcrumbSegment[
   const savings = routes.protected.savings.base
   const featureFlags = routes.protected.featureFlags.base
   const ajo = routes.protected.ajo.base
+  const circles = routes.protected.circles.base
   const reengagement = routes.protected.reengagement.base
   const kycNinReviews = routes.protected.kycNinReviews.base
   const kycAddressReviews = routes.protected.kycAddressReviews.base
@@ -117,6 +118,21 @@ export function getAdminBreadcrumbSegments(pathname: string): BreadcrumbSegment[
       { label: "Dashboard", href: admin },
       { label: "Ajo", href: ajo },
       { label: "Group details" },
+    ]
+  }
+
+  if (normalized === circles) {
+    return [
+      { label: "Dashboard", href: admin },
+      { label: "Circles" },
+    ]
+  }
+
+  if (normalized.startsWith(`${circles}/`)) {
+    return [
+      { label: "Dashboard", href: admin },
+      { label: "Circles", href: circles },
+      { label: "Circle details" },
     ]
   }
 

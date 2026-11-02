@@ -28,6 +28,14 @@ export function canManageClusters(roles?: string[]): boolean {
   )
 }
 
+/**
+ * Circle analytics is read-only. The API also admits `ops_admin`, which this app
+ * has no role constant for, so only the roles it knows about are gated here.
+ */
+export function canViewCircles(roles?: string[]): boolean {
+  return canManageClusters(roles)
+}
+
 export function canManageReengagement(roles?: string[]): boolean {
   return canManageClusters(roles)
 }
@@ -59,6 +67,11 @@ function isClusterAdminPath(pathname: string): boolean {
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 
+function isCircleAdminPath(pathname: string): boolean {
+  const base = routes.protected.circles.base
+  return pathname === base || pathname.startsWith(`${base}/`)
+}
+
 function isReengagementAdminPath(pathname: string): boolean {
   const base = routes.protected.reengagement.base
   return pathname === base || pathname.startsWith(`${base}/`)
@@ -85,6 +98,7 @@ export function canAccessAdminRoute(
     return isAdminDashboardPath(pathname) || isSavingsAdminPath(pathname)
   }
   if (isClusterAdminPath(pathname)) return canManageClusters(roles)
+  if (isCircleAdminPath(pathname)) return canViewCircles(roles)
   if (isReengagementAdminPath(pathname)) return canManageReengagement(roles)
   return true
 }

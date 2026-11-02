@@ -96,6 +96,20 @@ export const QUERY_KEYS = {
     },
   },
 
+  circles: {
+    all: ["circles"] as const,
+    list: ["circles", "list"] as const,
+    detail: (id: string) => ["circles", "detail", id] as const,
+    analytics: {
+      all: ["circles", "analytics"] as const,
+      overview: ["circles", "analytics", "overview"] as const,
+      funnel: (filters: Record<string, string>) =>
+        ["circles", "analytics", "funnel", filters] as const,
+      growth: (filters: Record<string, string>) =>
+        ["circles", "analytics", "growth", filters] as const,
+    },
+  },
+
   uploads: {
     all: ["uploads"],
     presign: (fileUrl: string) => ["uploads", "presign", fileUrl] as const,

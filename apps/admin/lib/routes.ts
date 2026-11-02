@@ -49,6 +49,10 @@ export const routes = {
       detail: (id: string) => `/admin/clusters/${encodeURIComponent(id)}`,
       withdrawals: "/admin/clusters/withdrawals",
     },
+    circles: {
+      base: "/admin/circles",
+      detail: (id: string) => `/admin/circles/${encodeURIComponent(id)}`,
+    },
     reengagement: {
       base: "/admin/reengagement",
     },
