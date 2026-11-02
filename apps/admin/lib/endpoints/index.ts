@@ -83,6 +83,11 @@ export const endpoints = {
     clustersAnalyticsWithdrawalVolume:
       "/admin/clusters/analytics/withdrawal-volume",
     clustersBackfillContributors: "/admin/clusters/jobs/backfill-contributors",
+    circles: "/admin/circles",
+    circleById: (id: string) => `/admin/circles/${encodeURIComponent(id)}`,
+    circlesAnalyticsOverview: "/admin/circles/analytics/overview",
+    circlesAnalyticsFunnel: "/admin/circles/analytics/funnel",
+    circlesAnalyticsGrowth: "/admin/circles/analytics/growth",
     reengagementConfig: "/admin/reengagement/config",
     reengagementRun: "/admin/reengagement/run",
     reengagementNudges: "/admin/reengagement/nudges",

@@ -13,6 +13,7 @@ export const SAVINGS_METRICS_PRODUCTS = [
   "FIXED",
   "TARGET",
   "VAULT",
+  "CIRCLE",
 ] as const
 
 export const SAVINGS_ACCOUNT_STATUSES = [
@@ -29,6 +30,7 @@ const SAVINGS_METRICS_PRODUCT_LABELS: Record<SavingsMetricsProduct, string> = {
   FIXED: "Fixed",
   TARGET: "Target",
   VAULT: "Vault",
+  CIRCLE: "Circle",
 }
 
 const SAVINGS_PRODUCT_TYPE_LABELS: Record<SavingsProductType, string> = {
