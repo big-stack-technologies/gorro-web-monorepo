@@ -30,8 +30,8 @@ import {
   FinanceNote,
   FinanceSectionError,
   FinanceUnknownValue,
+  SectionHeading,
 } from "@/features/finance/ui/finance-states"
-import { SectionHeading } from "@/features/overview/ui/section"
 
 function AmountRow({
   label,
@@ -91,7 +91,9 @@ function RevenueContent({ data }: { data: FinanceRevenueResponse }) {
           label="Pipeline — not revenue"
           value={formatKobo(pendingTotal)}
           hint={
-            <FinanceNote>{data.pendingNote || PENDING_FALLBACK_NOTE}</FinanceNote>
+            <FinanceNote>
+              {data.pendingNote || PENDING_FALLBACK_NOTE}
+            </FinanceNote>
           }
         />
       </div>

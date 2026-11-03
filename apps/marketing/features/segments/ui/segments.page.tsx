@@ -20,7 +20,7 @@ import {
   SectionError,
   SectionHeading,
   CardGridSkeleton,
-} from "@/features/overview/ui/section"
+} from "@gorro/ui/components/section"
 import { routes } from "@/lib/routes"
 
 function SegmentCard({ segment }: { segment: MarketingSegmentSummary }) {

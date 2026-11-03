@@ -2,7 +2,7 @@
 
 import { ArrowUpDownIcon } from "lucide-react"
 
-import { Button } from "@gorro/ui/components/ui/button"
+import { Button } from "../ui/button"
 
 export function SortHeader({
   label,

@@ -67,6 +67,7 @@ export type CgaPerformanceRow = {
   clustersCreated: number
   transactions: number
   gtv: number
+  bookValue: number
   activeCustomers: number
   dormantCustomers: number
   totalCustomers: number

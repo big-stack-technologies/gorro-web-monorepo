@@ -1,3 +1,4 @@
+import { canViewFinance } from "@/features/finance/constants"
 import { USER_ROLE } from "@/features/users/constants"
 import { routes } from "@/lib/routes"
 
@@ -72,6 +73,11 @@ function isCircleAdminPath(pathname: string): boolean {
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 
+function isFinanceAdminPath(pathname: string): boolean {
+  const base = routes.protected.finance.base
+  return pathname === base || pathname.startsWith(`${base}/`)
+}
+
 function isReengagementAdminPath(pathname: string): boolean {
   const base = routes.protected.reengagement.base
   return pathname === base || pathname.startsWith(`${base}/`)
@@ -98,6 +104,7 @@ export function canAccessAdminRoute(
     return isAdminDashboardPath(pathname) || isSavingsAdminPath(pathname)
   }
   if (isClusterAdminPath(pathname)) return canManageClusters(roles)
+  if (isFinanceAdminPath(pathname)) return canViewFinance(roles)
   if (isCircleAdminPath(pathname)) return canViewCircles(roles)
   if (isReengagementAdminPath(pathname)) return canManageReengagement(roles)
   return true

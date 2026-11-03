@@ -1,8 +1,8 @@
 "use client"
 
 import { getApiErrorMessage } from "@gorro/api/api-error"
-import { Button } from "@gorro/ui/components/ui/button"
-import { Skeleton } from "@gorro/ui/components/ui/skeleton"
+import { Button } from "./ui/button"
+import { Skeleton } from "./ui/skeleton"
 
 export function SectionHeading({
   title,
@@ -17,7 +17,7 @@ export function SectionHeading({
         {title}
       </h2>
       {description ? (
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground text-sm">{description}</p>
       ) : null}
     </div>
   )
@@ -31,8 +31,8 @@ export function SectionError({
   onRetry: () => void
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-xl bg-destructive/5 px-4 py-4 ring-1 ring-destructive/30 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm text-destructive">{getApiErrorMessage(error)}</p>
+    <div className="bg-destructive/5 ring-destructive/30 flex flex-col gap-3 rounded-xl px-4 py-4 ring-1 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-destructive text-sm">{getApiErrorMessage(error)}</p>
       <Button variant="outline" size="sm" onClick={onRetry}>
         Retry
       </Button>
@@ -46,7 +46,7 @@ export function CardGridSkeleton({ count }: { count: number }) {
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="rounded-xl bg-card px-4 py-4 ring-1 ring-foreground/10"
+          className="bg-card ring-foreground/10 rounded-xl px-4 py-4 ring-1"
         >
           <Skeleton className="h-3 w-24" />
           <Skeleton className="mt-3 h-8 w-20" />

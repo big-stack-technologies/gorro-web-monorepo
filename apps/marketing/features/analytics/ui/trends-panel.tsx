@@ -34,7 +34,7 @@ import type {
 } from "@/features/analytics/types"
 import { useMarketingTrends } from "@/features/analytics/usecases"
 import { formatPeriodRange } from "@/features/overview/format"
-import { SectionError } from "@/features/overview/ui/section"
+import { SectionError } from "@gorro/ui/components/section"
 
 function metricLabel(metric: MarketingTrendsFilters["metric"]) {
   return TRENDS_METRICS.find((item) => item.value === metric)?.label ?? metric

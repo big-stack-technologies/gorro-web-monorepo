@@ -4,7 +4,10 @@ import * as React from "react"
 import { PlusIcon } from "lucide-react"
 
 import { AdminPageHeader } from "@gorro/ui/components/admin-page-header"
-import { DataTableFilterBar } from "@gorro/ui/components/data-table"
+import {
+  DataTableFilterBar,
+  SortableTable,
+} from "@gorro/ui/components/data-table"
 import { Button } from "@gorro/ui/components/ui/button"
 import { Label } from "@gorro/ui/components/ui/label"
 import { Switch } from "@gorro/ui/components/ui/switch"
@@ -16,8 +19,7 @@ import {
 } from "@gorro/ui/components/ui/tabs"
 import { formatUtcDate } from "@gorro/ui/utils"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
-import { useLocalFilters } from "@/features/cgas/hooks/use-local-filters"
+import { useLocalFilters } from "@gorro/ui/hooks/use-local-filters"
 import { createTerritoryListColumns } from "@/features/org/columns/territory-list.columns"
 import { territoryPerformanceColumns } from "@/features/org/columns/territory-performance.columns"
 import {
@@ -31,10 +33,7 @@ import {
   useOrgTerritories,
   useTerritoriesPerformance,
 } from "@/features/org/usecases"
-import {
-  SectionError,
-  SectionHeading,
-} from "@/features/overview/ui/section"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 export function TerritoriesPage() {
   const [includeInactive, setIncludeInactive] = React.useState(false)
   const [createOpen, setCreateOpen] = React.useState(false)
@@ -91,7 +90,7 @@ export function TerritoriesPage() {
               onRetry={() => void territories.refetch()}
             />
           ) : (
-            <CgaSortableTable
+            <SortableTable
               data={territories.data ?? []}
               columns={listColumns}
               isLoading={territories.isLoading}
@@ -113,7 +112,7 @@ export function TerritoriesPage() {
             clearFilters={periodFilters.clearFilters}
           />
           {performance.data?.period ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {formatUtcDate(performance.data.period.from)} –{" "}
               {formatUtcDate(performance.data.period.to)}
             </p>
@@ -124,7 +123,7 @@ export function TerritoriesPage() {
               onRetry={() => void performance.refetch()}
             />
           ) : (
-            <CgaSortableTable
+            <SortableTable
               data={performanceRows}
               columns={territoryPerformanceColumns}
               isLoading={performance.isLoading}

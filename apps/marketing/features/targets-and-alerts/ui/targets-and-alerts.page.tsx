@@ -7,12 +7,12 @@ import { DatePicker } from "@gorro/ui/components/date-picker"
 import { Button } from "@gorro/ui/components/ui/button"
 import { Label } from "@gorro/ui/components/ui/label"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
+import { SortableTable } from "@gorro/ui/components/data-table"
 import { targetHistoryColumns } from "@/features/targets-and-alerts/columns/target-history.columns"
 import { AlertRulesPanel } from "@/features/targets-and-alerts/ui/alert-rules-panel"
 import { SetTargetDialog } from "@/features/targets-and-alerts/ui/set-target-dialog"
 import { useMarketingTargets } from "@/features/targets-and-alerts/usecases"
-import { SectionError } from "@/features/overview/ui/section"
+import { SectionError } from "@gorro/ui/components/section"
 
 function defaultHistoryFilterDate() {
   const now = new Date()
@@ -67,7 +67,7 @@ export function TargetsAndAlertsPage() {
             onRetry={() => void targets.refetch()}
           />
         ) : (
-          <CgaSortableTable
+          <SortableTable
             data={targets.data ?? []}
             columns={targetHistoryColumns}
             isLoading={targets.isLoading}

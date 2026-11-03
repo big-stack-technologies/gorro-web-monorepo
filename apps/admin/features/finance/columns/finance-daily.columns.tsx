@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 import { formatUtcDate } from "@gorro/ui/utils"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import { formatKobo } from "@/features/finance/format"
 import type { FinanceDailyRow } from "@/features/finance/types"
 

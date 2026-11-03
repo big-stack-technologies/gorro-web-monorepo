@@ -137,6 +137,17 @@ export const QUERY_KEYS = {
       ["kyc-reviews", "address", "detail", id] as const,
   },
 
+  finance: {
+    all: ["finance"] as const,
+    daily: (filters: Record<string, string>) =>
+      ["finance", "daily", filters] as const,
+    revenue: (filters: Record<string, string>) =>
+      ["finance", "revenue", filters] as const,
+    costs: (filters: Record<string, string>) =>
+      ["finance", "costs", filters] as const,
+    liquidity: ["finance", "liquidity"] as const,
+  },
+
   walletCredits: {
     all: ["wallet-credits"] as const,
     list: ["wallet-credits", "list"] as const,

@@ -14,6 +14,8 @@
     "./endpoints": "./src/endpoints.ts",
     "./clear-session": "./src/clear-session.ts",
     "./build-paginated-query-params": "./src/build-paginated-query-params.ts",
+    "./csv-file": "./src/csv-file.ts",
+    "./format-date-param": "./src/format-date-param.ts",
     "./types/paginated-list": "./src/types/paginated-list.ts",
     "./types/analytics-api": "./src/types/analytics-api.ts",
     "./query/query-client": "./src/query/query-client.ts",

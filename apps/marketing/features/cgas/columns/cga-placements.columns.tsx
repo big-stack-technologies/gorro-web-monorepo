@@ -12,7 +12,7 @@ import {
 } from "@gorro/ui/components/ui/dropdown-menu"
 import { formatUtcDate } from "@gorro/ui/utils"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import type { CgaActionSubject, CgaPlacement } from "@/features/cgas/types"
 
 export function createCgaPlacementsColumns(options: {

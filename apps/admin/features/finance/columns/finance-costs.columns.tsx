@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import { formatFinanceLabel, formatKobo } from "@/features/finance/format"
 import type {
   FinanceKycCheckVolume,
@@ -24,7 +24,9 @@ export const processorCostColumns: ColumnDef<FinanceProcessorCost>[] = [
     accessorKey: "minorUnits",
     header: ({ column }) => <SortHeader label="Cost" column={column} />,
     cell: ({ row }) => (
-      <span className="tabular-nums">{formatKobo(row.original.minorUnits)}</span>
+      <span className="tabular-nums">
+        {formatKobo(row.original.minorUnits)}
+      </span>
     ),
   },
 ]

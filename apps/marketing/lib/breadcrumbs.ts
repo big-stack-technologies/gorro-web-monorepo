@@ -101,12 +101,5 @@ export function getMarketingBreadcrumbSegments(
     ]
   }
 
-  if (normalized === routes.finance) {
-    return [
-      { label: "Overview", href: routes.home },
-      { label: "Finance" },
-    ]
-  }
-
   return [{ label: "Overview", href: routes.home }, { label: "Marketing" }]
 }

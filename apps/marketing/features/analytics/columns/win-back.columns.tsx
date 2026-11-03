@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 import { formatSnakeCaseWords } from "@gorro/ui/utils"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import type { MarketingWinBackRow } from "@/features/analytics/types"
 
 export const winBackColumns: ColumnDef<MarketingWinBackRow>[] = [

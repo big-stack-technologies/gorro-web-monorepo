@@ -28,7 +28,7 @@ import {
   useMarketingDormancy,
   useMarketingFunnel,
 } from "@/features/analytics/usecases"
-import { useLocalFilters } from "@/features/cgas/hooks/use-local-filters"
+import { useLocalFilters } from "@gorro/ui/hooks/use-local-filters"
 
 export function AnalyticsPage() {
   const periodFilters = useLocalFilters(

@@ -5,7 +5,7 @@ import { CreditCardIcon, FingerprintIcon, ReceiptIcon } from "lucide-react"
 import { AnalyticsStatCard } from "@gorro/ui/components/analytics-stat-card"
 import { Skeleton } from "@gorro/ui/components/ui/skeleton"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
+import { SortableTable } from "@gorro/ui/components/data-table"
 import {
   kycCheckColumns,
   processorCostColumns,
@@ -19,8 +19,8 @@ import { useFinanceCosts } from "@/features/finance/usecases"
 import {
   FinanceNote,
   FinanceSectionError,
+  SectionHeading,
 } from "@/features/finance/ui/finance-states"
-import { SectionHeading } from "@/features/overview/ui/section"
 
 function identityHint(data: FinanceCostsResponse) {
   const { checks, successful } = data.identityVerification
@@ -69,7 +69,7 @@ function CostsContent({ data }: { data: FinanceCostsResponse }) {
           title="Processor charges"
           description="Fees charged by each payment rail."
         />
-        <CgaSortableTable
+        <SortableTable
           data={data.processors}
           columns={processorCostColumns}
           isLoading={false}
@@ -84,7 +84,7 @@ function CostsContent({ data }: { data: FinanceCostsResponse }) {
           title="KYC check volume"
           description="NIN and address checks behind the KYC tiers. Volume only — no cost is applied."
         />
-        <CgaSortableTable
+        <SortableTable
           data={data.kycChecks}
           columns={kycCheckColumns}
           isLoading={false}

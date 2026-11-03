@@ -5,7 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@gorro/ui/components/ui/badge"
 import { formatNgn, formatSnakeCaseWords, formatUtcDate } from "@gorro/ui/utils"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import { COMMUNITY_TYPE_LABELS } from "@/features/communities/constants"
 import type { MarketingCommunity } from "@/features/communities/types"
 import { CommunityRowActions } from "@/features/communities/ui/community-row-actions"

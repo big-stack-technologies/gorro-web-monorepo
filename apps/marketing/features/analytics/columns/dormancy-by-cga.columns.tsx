@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import type { MarketingDormancyByCgaRow } from "@/features/analytics/types"
 
 export const dormancyByCgaColumns: ColumnDef<MarketingDormancyByCgaRow>[] = [

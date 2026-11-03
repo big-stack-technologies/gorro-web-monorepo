@@ -35,6 +35,7 @@ import {
   IdCardIcon,
   HouseIcon,
   WalletIcon,
+  LandmarkIcon,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -46,6 +47,7 @@ import {
   isPartnerOnly,
   isSuperAdmin,
 } from "@/features/auth/access"
+import { canViewFinance } from "@/features/finance/constants"
 import { useGetProfile } from "@gorro/auth/use-get-profile"
 import { routes } from "@/lib/routes"
 
@@ -102,6 +104,16 @@ const data = {
           title: "Referrals",
           url: routes.protected.referrals.base,
           icon: <UsersRoundIcon />,
+        },
+      ],
+    },
+    {
+      title: "Finance",
+      items: [
+        {
+          title: "Finance",
+          url: routes.protected.finance.base,
+          icon: <LandmarkIcon />,
         },
       ],
     },
@@ -261,6 +273,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           item.url === routes.protected.clusters.withdrawals
         ) {
           return clustersAllowed
+        }
+        if (item.url === routes.protected.finance.base) {
+          return canViewFinance(profile?.roles)
         }
         if (item.url === routes.protected.circles.base) {
           return circlesAllowed

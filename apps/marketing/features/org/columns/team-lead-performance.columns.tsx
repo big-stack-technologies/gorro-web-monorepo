@@ -5,7 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@gorro/ui/components/ui/badge"
 import { formatNgn, formatSnakeCaseWords } from "@gorro/ui/utils"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import { CGA_STATUS_LABELS } from "@/features/cgas/constants"
 import type { TeamLeadPerformanceRow } from "@/features/org/types"
 

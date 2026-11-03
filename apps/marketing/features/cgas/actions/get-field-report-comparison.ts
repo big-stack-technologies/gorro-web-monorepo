@@ -2,7 +2,7 @@
 
 import { get } from "@gorro/api/client"
 
-import { formatDateParam } from "@/features/analytics/actions/build-params"
+import { formatDateParam } from "@gorro/api/format-date-param"
 import type {
   FieldReportComparison,
   FieldReportComparisonFilters,

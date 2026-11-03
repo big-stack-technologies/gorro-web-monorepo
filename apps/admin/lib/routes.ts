@@ -69,6 +69,9 @@ export const routes = {
     walletCredits: {
       base: "/admin/wallet-credits",
     },
+    finance: {
+      base: "/admin/finance",
+    },
   },
 } as const
 

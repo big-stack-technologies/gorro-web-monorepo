@@ -5,20 +5,23 @@ import { get } from "@gorro/api/client"
 import { buildFinancePeriodParams } from "@/features/finance/actions/build-params"
 import type {
   FinancePeriodFilters,
-  FinanceDailyResponse,
+  FinanceRevenueResponse,
 } from "@/features/finance/types"
 import { endpoints } from "@/lib/endpoints"
 
-export async function getFinanceDailyAction(
+export async function getFinanceRevenueAction(
   filters: FinancePeriodFilters = {}
-): Promise<FinanceDailyResponse> {
+): Promise<FinanceRevenueResponse> {
   try {
-    const { data } = await get<FinanceDailyResponse>(endpoints.finance.daily, {
-      params: buildFinancePeriodParams(filters),
-    })
+    const { data } = await get<FinanceRevenueResponse>(
+      endpoints.admin.financeRevenue,
+      {
+        params: buildFinancePeriodParams(filters),
+      }
+    )
     return data
   } catch (error) {
-    console.error("Failed to load finance daily:", error)
+    console.error("Failed to load finance revenue:", error)
     throw error
   }
 }

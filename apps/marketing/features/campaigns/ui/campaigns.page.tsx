@@ -17,13 +17,13 @@ import {
 import { useTerritories } from "@/features/cgas/usecases"
 import { campaignColumns } from "@/features/campaigns/columns/campaign.columns"
 import { CampaignFormDialog } from "@/features/campaigns/ui/campaign-form-dialog"
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
+import { SortableTable } from "@gorro/ui/components/data-table"
 import { useCampaigns } from "@/features/campaigns/usecases"
 import { ReportExportPanel } from "@/features/marketing-export/ui/report-export-panel"
 import {
   SectionError,
   SectionHeading,
-} from "@/features/overview/ui/section"
+} from "@gorro/ui/components/section"
 import { routes } from "@/lib/routes"
 
 const ALL_TERRITORIES = "__all__"
@@ -79,7 +79,7 @@ export function CampaignsPage() {
             onRetry={() => void campaigns.refetch()}
           />
         ) : (
-          <CgaSortableTable
+          <SortableTable
             data={campaigns.data ?? []}
             columns={campaignColumns}
             isLoading={campaigns.isLoading || territories.isLoading}
