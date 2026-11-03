@@ -5,7 +5,7 @@ import { Skeleton } from "@gorro/ui/components/ui/skeleton"
 import { cn } from "@gorro/ui/utils"
 
 import type { MarketingAlert, MarketingAlerts } from "@/features/overview/types"
-import { SectionError } from "@/features/overview/ui/section"
+import { SectionError } from "@gorro/ui/components/section"
 
 function severityLabel(severity: string) {
   if (severity === "HIGH") return "High"

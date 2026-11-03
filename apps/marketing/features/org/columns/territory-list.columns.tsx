@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@gorro/ui/components/ui/badge"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import type { MarketingTerritory } from "@/features/cgas/types"
 import { TerritoryRowActions } from "@/features/org/ui/territory-row-actions"
 

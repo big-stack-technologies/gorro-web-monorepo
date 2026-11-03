@@ -13,7 +13,7 @@ import {
 } from "@gorro/ui/components/ui/dropdown-menu"
 import { formatNgn, formatSnakeCaseWords } from "@gorro/ui/utils"
 
-import { SortHeader } from "@/features/cgas/columns/column-utils"
+import { SortHeader } from "@gorro/ui/components/data-table"
 import { CGA_KPI_LABELS, CGA_STATUS_LABELS } from "@/features/cgas/constants"
 import type { CgaActionSubject, CgaPerformanceRow } from "@/features/cgas/types"
 
@@ -59,6 +59,11 @@ export function createCgaPerformanceColumns(options: {
         <SortHeader label={CGA_KPI_LABELS.gtv} column={column} />
       ),
       cell: ({ row }) => formatNgn(row.original.gtv),
+    },
+    {
+      accessorKey: "bookValue",
+      header: ({ column }) => <SortHeader label="Book value" column={column} />,
+      cell: ({ row }) => formatNgn(row.original.bookValue),
     },
     {
       accessorKey: "firstDepositRate",

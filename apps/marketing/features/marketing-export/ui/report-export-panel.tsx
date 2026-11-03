@@ -19,8 +19,8 @@ import {
   MARKETING_EXPORT_REPORTS,
   type MarketingExportReport,
 } from "@/features/marketing-export/constants"
-import { useCsvDownload } from "@/features/marketing-export/usecases/use-csv-download"
-import { SectionHeading } from "@/features/overview/ui/section"
+import { useCsvDownload } from "@gorro/ui/hooks/use-csv-download"
+import { SectionHeading } from "@gorro/ui/components/section"
 
 type ReportExportPanelProps = {
   defaultReport?: MarketingExportReport

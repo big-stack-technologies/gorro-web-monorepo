@@ -11,7 +11,7 @@ import type {
   MarketingManagementSummary,
   MarketingRetention,
 } from "@/features/overview/types"
-import { SectionError, SectionHeading } from "@/features/overview/ui/section"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 
 function stageLabel(key: string) {
   return FUNNEL_STAGE_LABELS[key] ?? formatSnakeCaseWords(key)

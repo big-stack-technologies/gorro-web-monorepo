@@ -4,7 +4,10 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 
 import { AdminPageHeader } from "@gorro/ui/components/admin-page-header"
-import { DataTableFilterBar } from "@gorro/ui/components/data-table"
+import {
+  DataTableFilterBar,
+  SortableTable,
+} from "@gorro/ui/components/data-table"
 import {
   Tabs,
   TabsContent,
@@ -30,9 +33,8 @@ import {
   TRENDS_FILTER_KEYS,
   PERFORMANCE_FILTER_KEYS,
 } from "@/features/cgas/cga-filter-config"
-import { useLocalFilters } from "@/features/cgas/hooks/use-local-filters"
+import { useLocalFilters } from "@gorro/ui/hooks/use-local-filters"
 import { CgaAssignmentDialog } from "@/features/cgas/ui/cga-assignment-dialog"
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
 import { CgaTargetDialog } from "@/features/cgas/ui/cga-target-dialog"
 import { CgaTrendsChart } from "@/features/cgas/ui/cga-trends-chart"
 import type { CgaActionSubject } from "@/features/cgas/types"
@@ -41,10 +43,7 @@ import {
   useFieldReportComparison,
   useTerritories,
 } from "@/features/cgas/usecases"
-import {
-  SectionError,
-  SectionHeading,
-} from "@/features/overview/ui/section"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 import { routes } from "@/lib/routes"
 
 function CgaSection({
@@ -162,7 +161,7 @@ export function CgasPage() {
         title="Referral trends"
         description="New referrals and bonus paid over time. Use email or phone to narrow to one CGA."
       >
-        <div className="min-w-0 overflow-hidden rounded-xl border border-border ring-1 ring-foreground/10">
+        <div className="border-border ring-foreground/10 min-w-0 overflow-hidden rounded-xl border ring-1">
           <DataTableFilterBar
             fields={trendsFilterFields}
             activeFilters={trendsFilters.activeFilters}
@@ -209,7 +208,7 @@ export function CgasPage() {
             description="Signups, KYCs completed, first deposits, and deposit value. Deposit value is deposits only."
           >
             {performanceMeta ? (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Period {performanceMeta.period.from.slice(0, 10)} –{" "}
                 {performanceMeta.period.to.slice(0, 10)} · Month pace{" "}
                 {performanceMeta.pacePct}% · Headline metric:{" "}
@@ -224,7 +223,7 @@ export function CgasPage() {
                 onRetry={() => void performance.refetch()}
               />
             ) : (
-              <CgaSortableTable
+              <SortableTable
                 data={performanceRows}
                 columns={performanceColumns}
                 isLoading={performance.isLoading}
@@ -251,7 +250,7 @@ export function CgasPage() {
                 onRetry={() => void placements.refetch()}
               />
             ) : (
-              <CgaSortableTable
+              <SortableTable
                 data={placementRows}
                 columns={placementsColumns}
                 isLoading={placements.isLoading}
@@ -274,7 +273,7 @@ export function CgasPage() {
                 onRetry={() => void performance.refetch()}
               />
             ) : (
-              <CgaSortableTable
+              <SortableTable
                 data={performanceRows}
                 columns={performanceColumns}
                 isLoading={performance.isLoading}
@@ -301,7 +300,7 @@ export function CgasPage() {
                 onRetry={() => void comparison.refetch()}
               />
             ) : (
-              <CgaSortableTable
+              <SortableTable
                 data={comparisonRows}
                 columns={fieldReportComparisonColumns}
                 isLoading={comparison.isLoading}

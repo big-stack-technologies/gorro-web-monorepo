@@ -16,7 +16,7 @@ import {
   CardGridSkeleton,
   SectionError,
   SectionHeading,
-} from "@/features/overview/ui/section"
+} from "@gorro/ui/components/section"
 
 function TrendIcon({ trend }: { trend: MarketingMetric["trend"] }) {
   if (trend === "up") return <TrendingUpIcon className="size-3.5" aria-hidden />

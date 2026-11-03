@@ -181,6 +181,14 @@ export function getAdminBreadcrumbSegments(pathname: string): BreadcrumbSegment[
     ]
   }
 
+  const finance = routes.protected.finance.base
+  if (normalized === finance) {
+    return [
+      { label: "Dashboard", href: admin },
+      { label: "Finance" },
+    ]
+  }
+
   if (normalized.startsWith(`${admin}/`)) {
     const rest = normalized.slice(admin.length + 1)
     const first = rest.split("/")[0] ?? ""

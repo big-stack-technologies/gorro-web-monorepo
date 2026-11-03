@@ -13,7 +13,7 @@ import {
   TabsTrigger,
 } from "@gorro/ui/components/ui/tabs"
 
-import { useLocalFilters } from "@/features/cgas/hooks/use-local-filters"
+import { useLocalFilters } from "@gorro/ui/hooks/use-local-filters"
 import { exportFinanceDailyAction } from "@/features/finance/actions"
 import {
   FINANCE_DEFAULT_FILTERS,
@@ -25,7 +25,7 @@ import { CostsPanel } from "@/features/finance/ui/costs-panel"
 import { DailyPanel } from "@/features/finance/ui/daily-panel"
 import { LiquidityPanel } from "@/features/finance/ui/liquidity-panel"
 import { RevenuePanel } from "@/features/finance/ui/revenue-panel"
-import { useCsvDownload } from "@/features/marketing-export/usecases/use-csv-download"
+import { useCsvDownload } from "@gorro/ui/hooks/use-csv-download"
 
 export function FinancePage() {
   const periodFilters = useLocalFilters(

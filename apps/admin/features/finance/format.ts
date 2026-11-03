@@ -40,7 +40,9 @@ function addUtcDays(date: string, days: number) {
  * `days` only holds days with activity. Fill the gaps with zero activity,
  * carrying the running net forward, so the chart has one point per day.
  */
-export function gapFillDailyRows(data: FinanceDailyResponse): FinanceDailyRow[] {
+export function gapFillDailyRows(
+  data: FinanceDailyResponse
+): FinanceDailyRow[] {
   const byDate = new Map(data.days.map((day) => [day.date, day]))
   const rows: FinanceDailyRow[] = []
   let cumulative = 0

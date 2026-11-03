@@ -8,7 +8,7 @@ import { endpoints } from "@/lib/endpoints"
 export async function getFinanceLiquidityAction(): Promise<FinanceLiquidityResponse> {
   try {
     const { data } = await get<FinanceLiquidityResponse>(
-      endpoints.finance.liquidity
+      endpoints.admin.financeLiquidity
     )
     return data
   } catch (error) {

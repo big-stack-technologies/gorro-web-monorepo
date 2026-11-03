@@ -21,7 +21,6 @@ export const routes = {
     detail: (key: string) => `/segments/${encodeURIComponent(key)}`,
   },
   export: "/export",
-  finance: "/finance",
   org: {
     territories: "/territories",
     teamLeads: "/team-leads",

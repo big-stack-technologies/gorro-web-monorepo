@@ -9,7 +9,7 @@ import { Label } from "@gorro/ui/components/ui/label"
 import { Switch } from "@gorro/ui/components/ui/switch"
 import { cn } from "@gorro/ui/utils"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
+import { SortableTable } from "@gorro/ui/components/data-table"
 import {
   alertRuleSeverityLabel,
   formatAlertRuleThreshold,
@@ -20,7 +20,7 @@ import {
   useAlertRules,
   useUpdateAlertRule,
 } from "@/features/targets-and-alerts/usecases"
-import { SectionError } from "@/features/overview/ui/section"
+import { SectionError } from "@gorro/ui/components/section"
 
 function severityBadgeVariant(severity: string) {
   if (severity === "HIGH") return "destructive" as const
@@ -151,7 +151,7 @@ export function AlertRulesPanel() {
           onRetry={() => void rulesQuery.refetch()}
         />
       ) : (
-        <CgaSortableTable
+        <SortableTable
           data={rulesQuery.data ?? []}
           columns={columns}
           isLoading={rulesQuery.isLoading}

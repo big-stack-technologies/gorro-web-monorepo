@@ -1,6 +1,6 @@
-import { get } from "@gorro/api/client"
+import { get } from "./client"
 
-export type MarketingCsvFile = {
+export type CsvFile = {
   filename: string
   contentBase64: string
   mimeType: string
@@ -24,10 +24,10 @@ function parseContentDispositionFilename(
   return plain?.[1]?.trim() ?? null
 }
 
-export async function fetchMarketingCsv(
+export async function fetchCsvFile(
   url: string,
   params?: Record<string, string>
-): Promise<MarketingCsvFile> {
+): Promise<CsvFile> {
   const response = await get<ArrayBuffer>(url, {
     params,
     responseType: "arraybuffer",
@@ -39,10 +39,8 @@ export async function fetchMarketingCsv(
       : Buffer.from(response.data as unknown as ArrayBuffer)
 
   const disposition = response.headers["content-disposition"] as
-    | string
-    | undefined
-  const filename =
-    parseContentDispositionFilename(disposition) ?? "export.csv"
+    string | undefined
+  const filename = parseContentDispositionFilename(disposition) ?? "export.csv"
 
   return {
     filename,

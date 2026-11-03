@@ -2,7 +2,7 @@
 
 import { get } from "@gorro/api/client"
 
-import { formatDateParam } from "@/features/analytics/actions/build-params"
+import { formatDateParam } from "@gorro/api/format-date-param"
 import { endpoints } from "@/lib/endpoints"
 
 import type {
@@ -24,6 +24,7 @@ export async function getCgaPerformanceAction(
       endpoints.marketing.cgasPerformance,
       { params }
     )
+    console.log("CGA performance data:", data)
     return data
   } catch (error) {
     console.error("Failed to load CGA performance:", error)

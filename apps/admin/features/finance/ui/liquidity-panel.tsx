@@ -17,14 +17,12 @@ import { formatKobo } from "@/features/finance/format"
 import type { FinanceLiquidityResponse } from "@/features/finance/types"
 import { useFinanceLiquidity } from "@/features/finance/usecases"
 import {
+  CardGridSkeleton,
   FinanceNote,
   FinanceSectionError,
   FinanceUnknownValue,
-} from "@/features/finance/ui/finance-states"
-import {
-  CardGridSkeleton,
   SectionHeading,
-} from "@/features/overview/ui/section"
+} from "@/features/finance/ui/finance-states"
 
 function LiquidityCards({ data }: { data: FinanceLiquidityResponse }) {
   return (

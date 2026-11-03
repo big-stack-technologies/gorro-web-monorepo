@@ -111,6 +111,11 @@ export const endpoints = {
       `/admin/kyc/address-reviews/${encodeURIComponent(id)}/approve`,
     kycAddressReviewRejectById: (id: string) =>
       `/admin/kyc/address-reviews/${encodeURIComponent(id)}/reject`,
+    financeDaily: "/admin/finance/daily",
+    financeRevenue: "/admin/finance/revenue",
+    financeCosts: "/admin/finance/costs",
+    financeLiquidity: "/admin/finance/liquidity",
+    financeExport: "/admin/finance/export",
     walletCredits: "/admin/wallet-credits",
     walletCreditsWallets: "/admin/wallet-credits/wallets",
   },

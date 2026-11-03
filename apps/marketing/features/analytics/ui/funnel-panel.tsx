@@ -8,7 +8,7 @@ import {
   formatComparedWith,
   formatPeriodRange,
 } from "@/features/overview/format"
-import { SectionError, SectionHeading } from "@/features/overview/ui/section"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 import type { MarketingFunnelResponse } from "@/features/analytics/types"
 
 function stageLabel(key: string) {

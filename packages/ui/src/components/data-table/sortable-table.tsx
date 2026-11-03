@@ -13,8 +13,8 @@ import {
 import {
   DataTableFilterBar,
   type DataTableFilterField,
-} from "@gorro/ui/components/data-table"
-import { Skeleton } from "@gorro/ui/components/ui/skeleton"
+} from "./data-table-filters"
+import { Skeleton } from "../ui/skeleton"
 import {
   Table,
   TableBody,
@@ -22,10 +22,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@gorro/ui/components/ui/table"
-import { cn } from "@gorro/ui/utils"
+} from "../ui/table"
+import { cn } from "../../lib/utils"
 
-type CgaSortableTableProps<T> = {
+type SortableTableProps<T> = {
   data: T[]
   columns: ColumnDef<T>[]
   isLoading: boolean
@@ -40,7 +40,7 @@ type CgaSortableTableProps<T> = {
   clearFilters?: () => void
 }
 
-export function CgaSortableTable<T>({
+export function SortableTable<T>({
   data,
   columns,
   isLoading,
@@ -52,7 +52,7 @@ export function CgaSortableTable<T>({
   activeFilters = {},
   setFilters,
   clearFilters,
-}: CgaSortableTableProps<T>) {
+}: SortableTableProps<T>) {
   const [sorting, setSorting] = React.useState<SortingState>(defaultSorting)
 
   const { sortableRows, pinnedRows } = React.useMemo(() => {
@@ -92,7 +92,7 @@ export function CgaSortableTable<T>({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-xl border border-border ring-1 ring-foreground/10"
+        "border-border ring-foreground/10 overflow-hidden rounded-xl border ring-1"
       )}
     >
       {showFilterBar ? (
@@ -116,9 +116,9 @@ export function CgaSortableTable<T>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -129,7 +129,7 @@ export function CgaSortableTable<T>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center text-muted-foreground"
+                    className="text-muted-foreground h-24 text-center"
                   >
                     {emptyMessage}
                   </TableCell>
@@ -144,9 +144,7 @@ export function CgaSortableTable<T>({
                     }
                     className={onRowClick ? "cursor-pointer" : undefined}
                     onClick={
-                      onRowClick
-                        ? () => onRowClick(row.original)
-                        : undefined
+                      onRowClick ? () => onRowClick(row.original) : undefined
                     }
                   >
                     {row.getVisibleCells().map((cell) => (

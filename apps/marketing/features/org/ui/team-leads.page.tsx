@@ -4,7 +4,10 @@ import * as React from "react"
 import { PlusIcon } from "lucide-react"
 
 import { AdminPageHeader } from "@gorro/ui/components/admin-page-header"
-import { DataTableFilterBar } from "@gorro/ui/components/data-table"
+import {
+  DataTableFilterBar,
+  SortableTable,
+} from "@gorro/ui/components/data-table"
 import { Button } from "@gorro/ui/components/ui/button"
 import { Label } from "@gorro/ui/components/ui/label"
 import { Switch } from "@gorro/ui/components/ui/switch"
@@ -16,8 +19,7 @@ import {
 } from "@gorro/ui/components/ui/tabs"
 import { formatUtcDate } from "@gorro/ui/utils"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
-import { useLocalFilters } from "@/features/cgas/hooks/use-local-filters"
+import { useLocalFilters } from "@gorro/ui/hooks/use-local-filters"
 import { createTeamLeadListColumns } from "@/features/org/columns/team-lead-list.columns"
 import { teamLeadPerformanceColumns } from "@/features/org/columns/team-lead-performance.columns"
 import {
@@ -31,10 +33,7 @@ import {
   useOrgTeamLeads,
   useTeamLeadsPerformance,
 } from "@/features/org/usecases"
-import {
-  SectionError,
-  SectionHeading,
-} from "@/features/overview/ui/section"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 
 export function TeamLeadsPage() {
   const [includeInactive, setIncludeInactive] = React.useState(false)
@@ -92,7 +91,7 @@ export function TeamLeadsPage() {
               onRetry={() => void teamLeads.refetch()}
             />
           ) : (
-            <CgaSortableTable
+            <SortableTable
               data={teamLeads.data ?? []}
               columns={listColumns}
               isLoading={teamLeads.isLoading}
@@ -114,7 +113,7 @@ export function TeamLeadsPage() {
             clearFilters={periodFilters.clearFilters}
           />
           {performance.data ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {formatUtcDate(performance.data.period.from)} –{" "}
               {formatUtcDate(performance.data.period.to)}
               {" · "}
@@ -127,7 +126,7 @@ export function TeamLeadsPage() {
               onRetry={() => void performance.refetch()}
             />
           ) : (
-            <CgaSortableTable
+            <SortableTable
               data={performanceRows}
               columns={teamLeadPerformanceColumns}
               isLoading={performance.isLoading}

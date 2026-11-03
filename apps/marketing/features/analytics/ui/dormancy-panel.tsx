@@ -9,8 +9,8 @@ import { dormancyByProductColumns } from "@/features/analytics/columns/dormancy-
 import { winBackColumns } from "@/features/analytics/columns/win-back.columns"
 import { WIN_BACK_CORRELATION_NOTE } from "@/features/analytics/constants"
 import type { MarketingDormancyResponse } from "@/features/analytics/types"
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
-import { SectionError, SectionHeading } from "@/features/overview/ui/section"
+import { SortableTable } from "@gorro/ui/components/data-table"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 
 const STATE_STYLES = {
   neverActivated: {
@@ -143,7 +143,7 @@ export function DormancyPanel({
           title="By CGA"
           description="State breakdown and dormancy rate per CGA."
         />
-        <CgaSortableTable
+        <SortableTable
           data={data.byCga}
           columns={dormancyByCgaColumns}
           isLoading={false}
@@ -157,7 +157,7 @@ export function DormancyPanel({
           title="By product"
           description="Where customers sit in each product line."
         />
-        <CgaSortableTable
+        <SortableTable
           data={data.byProduct}
           columns={dormancyByProductColumns}
           isLoading={false}
@@ -171,7 +171,7 @@ export function DormancyPanel({
           title="Win-back campaigns"
           description={WIN_BACK_CORRELATION_NOTE}
         />
-        <CgaSortableTable
+        <SortableTable
           data={data.winBack}
           columns={winBackColumns}
           isLoading={false}

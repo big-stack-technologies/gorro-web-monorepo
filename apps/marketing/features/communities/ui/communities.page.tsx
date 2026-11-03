@@ -13,14 +13,14 @@ import {
   SelectValue,
 } from "@gorro/ui/components/ui/select"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
+import { SortableTable } from "@gorro/ui/components/data-table"
 import { useMarketingCgas, useTerritories } from "@/features/cgas/usecases"
 import { createCommunityListColumns } from "@/features/communities/columns/community-list.columns"
 import { COMMUNITY_TYPES } from "@/features/communities/constants"
 import type { CommunityListFilters } from "@/features/communities/types"
 import { CommunityFormDialog } from "@/features/communities/ui/community-form-dialog"
 import { useCommunitiesList } from "@/features/communities/usecases"
-import { SectionError, SectionHeading } from "@/features/overview/ui/section"
+import { SectionError, SectionHeading } from "@gorro/ui/components/section"
 
 const ALL_TYPES = "__all_types__"
 const ALL_TERRITORIES = "__all_territories__"
@@ -117,7 +117,7 @@ export function CommunitiesPage() {
             onRetry={() => void communities.refetch()}
           />
         ) : (
-          <CgaSortableTable
+          <SortableTable
             data={communities.data ?? []}
             columns={listColumns}
             isLoading={

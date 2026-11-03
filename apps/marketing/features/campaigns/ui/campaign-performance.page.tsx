@@ -21,7 +21,7 @@ import {
   CardGridSkeleton,
   SectionError,
   SectionHeading,
-} from "@/features/overview/ui/section"
+} from "@gorro/ui/components/section"
 import { routes } from "@/lib/routes"
 
 function MetricCard({

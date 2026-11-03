@@ -31,7 +31,7 @@ import {
 import { Skeleton } from "@gorro/ui/components/ui/skeleton"
 import { formatUtcDate } from "@gorro/ui/utils"
 
-import { CgaSortableTable } from "@/features/cgas/ui/cga-sortable-table"
+import { SortableTable } from "@gorro/ui/components/data-table"
 import { financeDailyColumns } from "@/features/finance/columns/finance-daily.columns"
 import { PARTIAL_FALLBACK_REASON } from "@/features/finance/constants"
 import {
@@ -49,8 +49,8 @@ import {
   FinanceNote,
   FinancePartialBanner,
   FinanceSectionError,
+  SectionHeading,
 } from "@/features/finance/ui/finance-states"
-import { SectionHeading } from "@/features/overview/ui/section"
 
 const flowChartConfig = {
   totalRevenueMinorUnits: { label: "Revenue", color: "var(--chart-1)" },
@@ -232,7 +232,7 @@ function DailyContent({ data }: { data: FinanceDailyResponse }) {
 
       <DailyCharts data={data} />
 
-      <CgaSortableTable
+      <SortableTable
         data={data.days}
         columns={financeDailyColumns}
         isLoading={false}

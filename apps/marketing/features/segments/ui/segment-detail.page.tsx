@@ -16,8 +16,8 @@ import { createSegmentUsersColumns } from "@/features/segments/columns/segment-u
 import { useSegmentThresholdParams } from "@/features/segments/hooks/use-segment-threshold-params"
 import type { MarketingSegmentKey } from "@/features/segments/types"
 import { SegmentThresholdControls } from "@/features/segments/ui/segment-threshold-controls"
-import { useCsvDownload } from "@/features/marketing-export/usecases/use-csv-download"
-import { SectionHeading } from "@/features/overview/ui/section"
+import { useCsvDownload } from "@gorro/ui/hooks/use-csv-download"
+import { SectionHeading } from "@gorro/ui/components/section"
 import { QUERY_KEYS } from "@/lib/query-keys"
 import { routes } from "@/lib/routes"
 
